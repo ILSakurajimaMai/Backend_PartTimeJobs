@@ -34,6 +34,10 @@ public interface IUnitOfWork : IDisposable
     // Files
     IRepository<FileEntity> Files { get; }
 
+    // Chat
+    IRepository<ChatConversation> ChatConversations { get; }
+    IRepository<ChatMessage> ChatMessages { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     Task BeginTransactionAsync(CancellationToken cancellationToken = default);
     Task CommitTransactionAsync(CancellationToken cancellationToken = default);

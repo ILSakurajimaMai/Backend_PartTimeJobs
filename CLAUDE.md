@@ -173,6 +173,12 @@ dotnet restore
 - `ApplicationHistory` - tracks status changes
 - `ApplicationStatusLookup` - reference table for statuses (Pending, Accepted, Rejected, etc.)
 
+### Chat (Real-time Messaging)
+- `ChatConversation` - conversations between employers and students
+- `ChatMessage` - individual messages within conversations
+- Stored in `chat` schema for better organization
+- Supports typing indicators, read receipts, and unread counts
+
 ## Service Layer Structure
 
 Each major feature has an interface in `PTJ.Application/Services/` and implementation in `PTJ.Infrastructure/Services/`:
@@ -184,6 +190,7 @@ Each major feature has an interface in `PTJ.Application/Services/` and implement
 - `IApplicationService` / `ApplicationService` - Job application workflow
 - `IFileStorageService` / `LocalFileStorageService` - File uploads (resumes, certificates)
 - `ISearchService` / `SearchService` - Search functionality
+- `IChatService` / `ChatService` - Real-time chat messaging
 
 All services use `IUnitOfWork` for data access and return `Result<T>` objects.
 
@@ -197,6 +204,7 @@ Controllers in `PTJ.API/Controllers/`:
 - `ProfilesController` - Student profile management
 - `ApplicationsController` - Job application submission and tracking
 - `FilesController` - File upload/download
+- `ChatController` - Chat conversation and message management (REST API)
 
 ### Search Endpoints
 
@@ -224,6 +232,160 @@ GET /api/Companies/search?searchTerm=tech&pageNumber=1&pageSize=10&sortDescendin
 - Uses `IRepository.FindAsync()` with LINQ expressions that compile to SQL LIKE
 - Pattern: `var searchTerm = $"%{parameters.SearchTerm}%";` then `EF.Functions.Like(field, searchTerm)`
 - This approach ensures queries execute in the database, not in-memory
+
+## Real-time Chat with SignalR
+
+The API provides **real-time chat messaging** between EMPLOYER and STUDENT users using **SignalR**.
+
+### SignalR Hub
+
+**ChatHub** (`PTJ.API/Hubs/ChatHub.cs`):
+- WebSocket endpoint: `ws://localhost:5000/hubs/chat` (or `wss://` for HTTPS)
+- Requires JWT authentication via query string: `?access_token=YOUR_JWT_TOKEN`
+- Automatic user group management based on userId
+
+**Hub Methods** (callable from client):
+```typescript
+// Send a message
+SendMessage(dto: SendMessageDto): void
+
+// Mark messages as read
+MarkAsRead(conversationId: number): void
+
+// Update typing status
+UpdateTyping(conversationId: number, isTyping: boolean): void
+
+// Join/leave conversation groups
+JoinConversation(conversationId: number): void
+LeaveConversation(conversationId: number): void
+```
+
+**Client Events** (received from server):
+```typescript
+// Receive a new message
+ReceiveMessage(message: ChatMessageDto): void
+
+// Messages marked as read
+MessagesMarkedAsRead(conversationId: number): void
+
+// User typing status changed
+UserTyping(userId: number, isTyping: boolean): void
+
+// Error occurred
+Error(message: string): void
+```
+
+### Chat REST API Endpoints
+
+**Get or create conversation** (`POST /api/Chat/conversations`):
+```http
+POST /api/Chat/conversations
+{
+  "recipientId": 123,
+  "jobPostId": 456  // optional
+}
+```
+
+**Get user's conversations** (`GET /api/Chat/conversations`):
+```http
+GET /api/Chat/conversations?pageNumber=1&pageSize=20
+```
+
+**Get conversation messages** (`GET /api/Chat/conversations/{id}/messages`):
+```http
+GET /api/Chat/conversations/123/messages?pageNumber=1&pageSize=50
+```
+
+**Send message (HTTP alternative)** (`POST /api/Chat/messages`):
+```http
+POST /api/Chat/messages
+{
+  "conversationId": 123,  // or recipientId
+  "content": "Hello!"
+}
+```
+
+**Mark as read** (`POST /api/Chat/conversations/{id}/read`):
+```http
+POST /api/Chat/conversations/123/read
+```
+
+**Get unread count** (`GET /api/Chat/unread-count`):
+```http
+GET /api/Chat/unread-count
+```
+
+### Chat Features
+
+- **One-to-one conversations** between EMPLOYER and STUDENT
+- **Real-time message delivery** via SignalR WebSockets
+- **Read receipts** with timestamps
+- **Typing indicators** for better UX
+- **Unread message counts** per conversation
+- **Message pagination** for performance
+- **Conversation context** with optional JobPost link
+- **Fallback REST API** for clients without WebSocket support
+
+### Implementation Architecture
+
+**Domain Layer** (`PTJ.Domain/Entities/`):
+- `ChatConversation` - conversation entity with employer/student relationship
+- `ChatMessage` - message entity with read status
+
+**Application Layer** (`PTJ.Application/`):
+- `IChatService` interface
+- DTOs: `ChatConversationDto`, `ChatMessageDto`, `SendMessageDto`
+
+**Infrastructure Layer** (`PTJ.Infrastructure/Services/`):
+- `ChatService` - implements business logic
+- Uses `IUnitOfWork` for database operations
+- Stores data in `chat` schema
+
+**API Layer** (`PTJ.API/`):
+- `ChatHub` - SignalR hub for real-time communication
+- `ChatController` - REST API endpoints
+- JWT authentication for both WebSocket and HTTP
+
+### Client Connection Example (JavaScript)
+
+```javascript
+import * as signalR from "@microsoft/signalr";
+
+const connection = new signalR.HubConnectionBuilder()
+    .withUrl("http://localhost:5000/hubs/chat", {
+        accessTokenFactory: () => yourJwtToken
+    })
+    .withAutomaticReconnect()
+    .build();
+
+// Subscribe to events
+connection.on("ReceiveMessage", (message) => {
+    console.log("New message:", message);
+});
+
+connection.on("UserTyping", (userId, isTyping) => {
+    console.log(`User ${userId} is ${isTyping ? 'typing' : 'not typing'}`);
+});
+
+// Start connection
+await connection.start();
+
+// Send message
+await connection.invoke("SendMessage", {
+    recipientId: 123,
+    content: "Hello!"
+});
+
+// Update typing status
+await connection.invoke("UpdateTyping", conversationId, true);
+```
+
+### CORS Configuration for SignalR
+
+CORS is configured in Program.cs to support SignalR:
+- `AllowCredentials()` is required for SignalR
+- Frontend origins must be explicitly listed (not `AllowAnyOrigin()`)
+- Default origins: `http://localhost:3000`, `http://localhost:5173`
 
 ## Middleware & Filters
 

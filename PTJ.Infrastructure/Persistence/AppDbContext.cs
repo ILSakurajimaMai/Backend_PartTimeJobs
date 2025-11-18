@@ -47,6 +47,10 @@ public class AppDbContext : DbContext
     // Files
     public DbSet<FileEntity> Files => Set<FileEntity>();
 
+    // Chat
+    public DbSet<ChatConversation> ChatConversations => Set<ChatConversation>();
+    public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

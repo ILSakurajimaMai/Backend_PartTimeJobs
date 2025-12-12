@@ -12,8 +12,21 @@ using PTJ.Domain.Interfaces;
 using PTJ.Infrastructure.Persistence;
 using PTJ.Infrastructure.Repositories;
 using PTJ.Infrastructure.Services;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Serilog
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .Enrich.WithMachineName()
+    .Enrich.WithEnvironmentName()
+    .WriteTo.Console()
+    .WriteTo.File("logs/app-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Add services to the container
 builder.Services.AddControllers(options =>
@@ -158,6 +171,11 @@ builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
 builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
 builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddScoped<ISearchService, SearchService>();
+
+// Register logging services
+builder.Services.AddScoped<IActivityLogService, ActivityLogService>();
+builder.Services.AddScoped<IErrorLogService, ErrorLogService>();
 
 var app = builder.Build();
 
@@ -170,6 +188,9 @@ if (app.Environment.IsDevelopment())
 
 // Use global exception handling middleware
 app.UseMiddleware<GlobalExceptionMiddleware>();
+
+// Use request logging middleware (logs all HTTP requests with user info)
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.UseHttpsRedirection();
 

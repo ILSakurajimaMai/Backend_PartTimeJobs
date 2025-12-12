@@ -51,6 +51,10 @@ public class AppDbContext : DbContext
     public DbSet<ChatConversation> ChatConversations => Set<ChatConversation>();
     public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
 
+    // Logging
+    public DbSet<UserActivityLog> UserActivityLogs => Set<UserActivityLog>();
+    public DbSet<SystemErrorLog> SystemErrorLogs => Set<SystemErrorLog>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

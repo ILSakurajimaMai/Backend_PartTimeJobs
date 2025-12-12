@@ -11,11 +11,14 @@ namespace PTJ.Infrastructure.Services;
 public class JobPostService : IJobPostService
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ISearchService _searchService;
 
-    public JobPostService(IUnitOfWork unitOfWork)
+    public JobPostService(IUnitOfWork unitOfWork, ISearchService searchService)
     {
         _unitOfWork = unitOfWork;
+        _searchService = searchService;
     }
+
 
     public async Task<Result<JobPostDto>> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
@@ -65,58 +68,7 @@ public class JobPostService : IJobPostService
 
     public async Task<Result<PaginatedList<JobPostDto>>> SearchAsync(SearchParameters parameters, CancellationToken cancellationToken = default)
     {
-        // Build search expression for database query (uses SQL LIKE)
-        IEnumerable<JobPost> jobPosts;
-
-        if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
-        {
-            var searchTerm = $"%{parameters.SearchTerm}%";
-
-            // This will be translated to SQL LIKE query by EF Core
-            jobPosts = await _unitOfWork.JobPosts.FindAsync(jp =>
-                jp.Status == JobPostStatus.Active &&
-                (EF.Functions.Like(jp.Title, searchTerm) ||
-                 EF.Functions.Like(jp.Description ?? "", searchTerm) ||
-                 EF.Functions.Like(jp.Location ?? "", searchTerm)),
-                cancellationToken);
-        }
-        else
-        {
-            jobPosts = await _unitOfWork.JobPosts.FindAsync(
-                jp => jp.Status == JobPostStatus.Active,
-                cancellationToken);
-        }
-
-        var query = jobPosts.AsQueryable();
-
-        // Apply sorting
-        query = !string.IsNullOrEmpty(parameters.SortBy) && parameters.SortBy.ToLower() == "salary"
-            ? (parameters.SortDescending
-                ? query.OrderByDescending(jp => jp.SalaryMax ?? 0)
-                : query.OrderBy(jp => jp.SalaryMin ?? 0))
-            : (parameters.SortDescending
-                ? query.OrderByDescending(jp => jp.CreatedAt)
-                : query.OrderBy(jp => jp.CreatedAt));
-
-        var totalCount = query.Count();
-        var items = query
-            .Skip((parameters.PageNumber - 1) * parameters.PageSize)
-            .Take(parameters.PageSize)
-            .ToList();
-
-        var dtos = new List<JobPostDto>();
-        foreach (var jobPost in items)
-        {
-            var company = await _unitOfWork.Companies.GetByIdAsync(jobPost.CompanyId, cancellationToken);
-            var shifts = await _unitOfWork.JobShifts.FindAsync(s => s.JobPostId == jobPost.Id, cancellationToken);
-            var skills = await _unitOfWork.JobPostSkills.FindAsync(s => s.JobPostId == jobPost.Id, cancellationToken);
-
-            dtos.Add(MapToDto(jobPost, company, shifts.ToList(), skills.ToList()));
-        }
-
-        var result = new PaginatedList<JobPostDto>(dtos, totalCount, parameters.PageNumber, parameters.PageSize);
-
-        return Result<PaginatedList<JobPostDto>>.SuccessResult(result);
+        return await _searchService.SearchJobPostsAsync(parameters, cancellationToken);
     }
 
     public async Task<Result<PaginatedList<JobPostDto>>> GetByCompanyIdAsync(int companyId, int pageNumber, int pageSize, CancellationToken cancellationToken = default)

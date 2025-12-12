@@ -413,6 +413,183 @@ CORS is configured in Program.cs to support SignalR:
 - Swagger UI available at `/swagger` in development mode
 - JWT Bearer authentication configured in Swagger for testing
 
+## Logging System
+
+The application implements a comprehensive logging system using **Serilog** and custom database logging for tracking user activities and system errors.
+
+### Serilog Configuration
+
+**Packages Used**:
+- `Serilog.AspNetCore` - Core Serilog integration for ASP.NET Core
+- `Serilog.Sinks.MSSqlServer` - SQL Server sink (optional, for future use)
+- `Serilog.Enrichers.Environment` - Adds machine name and environment info to logs
+
+**Configuration** (`appsettings.Development.json`):
+```json
+{
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Information",
+      "Override": {
+        "Microsoft": "Warning",
+        "Microsoft.AspNetCore": "Warning",
+        "Microsoft.EntityFrameworkCore": "Information"
+      }
+    },
+    "WriteTo": [
+      { "Name": "Console" },
+      { "Name": "File", "Args": { "path": "logs/app-.txt", "rollingInterval": "Day" } }
+    ]
+  }
+}
+```
+
+**Log Files**: Stored in `logs/app-YYYYMMDD.txt` with daily rotation.
+
+### Database Logging Tables
+
+Two dedicated tables in the `logging` schema track activities and errors:
+
+**UserActivityLog** (`logging.UserActivityLogs`):
+- Logs every HTTP request with user context
+- Captures: UserId (from JWT), HTTP method, path, query string, IP address, user agent, status code, duration
+- Indexed on UserId and Timestamp for fast queries
+- Foreign key to Users table (nullable, for anonymous requests)
+
+**SystemErrorLog** (`logging.SystemErrorLogs`):
+- Logs all unhandled exceptions and errors
+- Captures: Error level, message, exception type, stack trace, inner exception, request context, user ID
+- Indexed on Level and Timestamp
+- Foreign key to Users table (nullable)
+
+### Logging Services
+
+**IActivityLogService** / **ActivityLogService**:
+```csharp
+// Log user activity
+await _activityLogService.LogActivityAsync(
+    userId: 123,
+    httpMethod: "POST",
+    path: "/api/auth/login",
+    queryString: null,
+    ipAddress: "192.168.1.1",
+    userAgent: "Mozilla/5.0...",
+    statusCode: 200,
+    durationMs: 45
+);
+
+// Retrieve logs with filtering
+var (logs, totalCount) = await _activityLogService.GetActivityLogsAsync(
+    userId: 123,
+    startDate: DateTime.UtcNow.AddDays(-7),
+    endDate: DateTime.UtcNow,
+    pageNumber: 1,
+    pageSize: 50
+);
+```
+
+**IErrorLogService** / **ErrorLogService**:
+```csharp
+// Log system error
+await _errorLogService.LogErrorAsync(
+    level: "Critical",
+    message: "Database connection failed",
+    exception: ex,
+    userId: 123,
+    requestPath: "/api/jobposts",
+    httpMethod: "GET",
+    ipAddress: "192.168.1.1"
+);
+
+// Retrieve error logs
+var (logs, totalCount) = await _errorLogService.GetErrorLogsAsync(
+    level: "Critical",
+    startDate: DateTime.UtcNow.AddDays(-1),
+    pageNumber: 1,
+    pageSize: 50
+);
+```
+
+### Middleware
+
+**RequestLoggingMiddleware**:
+- Automatically logs every HTTP request
+- Extracts `UserId` from JWT claims (supports `ClaimTypes.NameIdentifier`, `sub`, `userId`, `id`)
+- Measures request duration using `Stopwatch`
+- Captures client IP (supports `X-Forwarded-For` and `X-Real-IP` headers for proxy scenarios)
+- Logs to database via `IActivityLogService`
+- Registered in `Program.cs` after authentication middleware
+
+**GlobalExceptionMiddleware** (Enhanced):
+- Catches all unhandled exceptions
+- Logs errors to database via `IErrorLogService` with full context:
+  - Exception details (type, message, stack trace, inner exception)
+  - User context (extracted from JWT)
+  - Request details (path, method, query string, IP, user agent)
+  - Error severity level (Warning, Error, Critical)
+- Returns standardized JSON error responses
+- Never throws exceptions during logging (fail-safe design)
+
+### JWT Claims Extraction
+
+Both middleware components extract user identity from JWT tokens using this priority order:
+1. `ClaimTypes.NameIdentifier` (standard .NET claim)
+2. `sub` (standard JWT claim)
+3. `userId` (custom claim)
+4. `id` (custom claim)
+
+This ensures compatibility with various JWT token formats.
+
+### Admin Logging Endpoints
+
+**LogsController** (`/api/Logs`) - Requires `ADMIN` role:
+
+**Get Activity Logs**:
+```http
+GET /api/Logs/activities?userId=123&startDate=2024-01-01&pageNumber=1&pageSize=50
+```
+
+**Get Error Logs**:
+```http
+GET /api/Logs/errors?level=Critical&startDate=2024-01-01&pageNumber=1&pageSize=50
+```
+
+**Get Activity Statistics**:
+```http
+GET /api/Logs/activities/stats?startDate=2024-01-01&endDate=2024-01-31
+```
+Returns:
+- Total requests, successful/failed counts
+- Unique users, anonymous requests
+- Average response time
+- Top 10 most accessed paths
+
+**Get Error Statistics**:
+```http
+GET /api/Logs/errors/stats?startDate=2024-01-01&endDate=2024-01-31
+```
+Returns:
+- Error counts by level (Critical/Error/Warning)
+- Top 10 exception types
+- Top 10 error-prone endpoints
+
+### Client IP Detection
+
+The logging system intelligently detects client IP addresses considering proxy/load balancer scenarios:
+1. Check `X-Forwarded-For` header (takes first IP from comma-separated list)
+2. Check `X-Real-IP` header
+3. Fallback to `HttpContext.Connection.RemoteIpAddress`
+
+This ensures accurate IP logging in both development and production environments.
+
+### Best Practices
+
+- **Logging Never Fails**: Both logging services wrap operations in try-catch blocks to prevent logging errors from crashing the application
+- **Performance**: Activity logs use async operations and don't block request processing
+- **Security**: Sensitive data (passwords, tokens) should never be logged
+- **Retention**: Consider implementing log retention policies to manage database size
+- **Monitoring**: Use log statistics endpoints to identify performance bottlenecks and error patterns
+
 ## Important Notes
 
 - All timestamps use **UTC** (`DateTime.UtcNow`)

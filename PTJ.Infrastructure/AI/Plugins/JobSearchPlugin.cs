@@ -30,7 +30,7 @@ public class JobSearchPlugin
         
         var result = await _jobService.SearchAsync(parameters);
         
-        if (!result.Success)
+        if (!result.Success || result.Data == null)
             return "Failed to search jobs.";
 
         var simpleJobs = result.Data.Items.Select(j => new 

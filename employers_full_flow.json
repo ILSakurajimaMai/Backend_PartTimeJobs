@@ -1,0 +1,42 @@
+[
+    {
+        "email": "boss.angjane.464@corp.com",
+        "password": "Password123!",
+        "userId": 15,
+        "companyId": 3,
+        "companyName": null,
+        "status": "Pending Approval"
+    },
+    {
+        "email": "boss.buijohn.341@corp.com",
+        "password": "Password123!",
+        "userId": 16,
+        "companyId": 4,
+        "companyName": null,
+        "status": "Pending Approval"
+    },
+    {
+        "email": "boss.hoangjane.474@startup.io",
+        "password": "Password123!",
+        "userId": 17,
+        "companyId": 5,
+        "companyName": null,
+        "status": "Pending Approval"
+    },
+    {
+        "email": "boss.tranjohn.558@corp.com",
+        "password": "Password123!",
+        "userId": 18,
+        "companyId": 6,
+        "companyName": null,
+        "status": "Pending Approval"
+    },
+    {
+        "email": "boss.vujohn.658@startup.io",
+        "password": "Password123!",
+        "userId": 19,
+        "companyId": 7,
+        "companyName": null,
+        "status": "Pending Approval"
+    }
+]

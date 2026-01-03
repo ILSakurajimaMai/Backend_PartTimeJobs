@@ -1,0 +1,47 @@
+[
+    {
+        "email": "mai-john.373@example.com",
+        "password": "Password123!",
+        "fullName": "Mai John",
+        "userId": 5,
+        "role": [
+            "Unknown"
+        ]
+    },
+    {
+        "email": "mai-jane.330@student.edu.vn",
+        "password": "Password123!",
+        "fullName": "Mai Jane",
+        "userId": 6,
+        "role": [
+            "Unknown"
+        ]
+    },
+    {
+        "email": "nguyen-jane.969@example.com",
+        "password": "Password123!",
+        "fullName": "Nguyễn Jane",
+        "userId": 7,
+        "role": [
+            "Unknown"
+        ]
+    },
+    {
+        "email": "duong-jane.335@test.vn",
+        "password": "Password123!",
+        "fullName": "Dương Jane",
+        "userId": 8,
+        "role": [
+            "Unknown"
+        ]
+    },
+    {
+        "email": "le-john.126@test.vn",
+        "password": "Password123!",
+        "fullName": "Lê John",
+        "userId": 9,
+        "role": [
+            "Unknown"
+        ]
+    }
+]

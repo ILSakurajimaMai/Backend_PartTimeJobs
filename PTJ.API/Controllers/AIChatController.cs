@@ -33,9 +33,26 @@ public class AIChatController : ControllerBase
         var result = await _aiChatService.ChatAsync(userId, request.Message, HttpContext.RequestAborted);
 
         if (!result.Success)
-            return BadRequest(new { errors = result.Message ?? "Unknown error" }); // Fix message access too just in case
+            return BadRequest(new { errors = result.Message ?? "Unknown error" }); 
 
         return Ok(new { response = result.Data });
+    }
+
+    [HttpPost("restart")]
+    public async Task<IActionResult> RestartConversation()
+    {
+        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (!int.TryParse(userIdString, out int userId))
+        {
+            return Unauthorized();
+        }
+
+        var result = await _aiChatService.RestartSessionAsync(userId, HttpContext.RequestAborted);
+
+        if (!result.Success)
+            return BadRequest(new { errors = result.Message ?? "Failed to restart conversation" });
+
+        return Ok(new { message = result.Message });
     }
 }
 

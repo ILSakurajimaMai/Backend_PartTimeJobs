@@ -1,13 +1,13 @@
 # JobStudents - Server
 
-## 📖 Giới thiệu
+## Giới thiệu
 **JobStudents** là nền tảng kết nối sinh viên với các công việc bán thời gian phù hợp, tích hợp **AI Chatbot** thông minh để hỗ trợ tìm kiếm việc làm và tư vấn nghề nghiệp.
 
 Dự án được xây dựng theo kiến trúc **Clean Architecture**, đảm bảo tính mở rộng, bảo trì và hiệu năng cao.
 
 ---
 
-## 🚀 Công nghệ sử dụng
+## Công nghệ sử dụng
 
 - **Framework**: .NET 9 (ASP.NET Core Web API)
 - **Database**: SQL Server (Triển khai qua Entity Framework Core Code-First)
@@ -17,7 +17,7 @@ Dự án được xây dựng theo kiến trúc **Clean Architecture**, đảm b
 
 ---
 
-## ✨ Chức năng chính
+## Chức năng chính
 
 ### 1. Hệ thống việc làm
 - Đăng tin tuyển dụng, quản lý ca làm việc (Job Shifts).
@@ -36,7 +36,7 @@ Dự án được xây dựng theo kiến trúc **Clean Architecture**, đảm b
 
 ---
 
-## 🛠️ Hướng dẫn cài đặt & Chạy
+## Hướng dẫn cài đặt & Chạy
 
 ### Yêu cầu
 - .NET SDK 9.0 trở lên
@@ -58,7 +58,7 @@ Dự án được xây dựng theo kiến trúc **Clean Architecture**, đảm b
 
 ---
 
-## 📂 Cấu trúc dự án
+## Cấu trúc dự án
 - **PTJ.Domain**: Các Entities, Enums cốt lõi.
 - **PTJ.Application**: Logic nghiệp vụ, Interfaces, DTOs.
 - **PTJ.Infrastructure**: Triển khai Database, AI Services, Repositories.

@@ -2,16 +2,18 @@ using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.ChatCompletion; // Added
 using Microsoft.EntityFrameworkCore; // Added
+using Microsoft.Extensions.Configuration; // Added
 using PTJ.Application.Common;
 using PTJ.Application.Services;
 using PTJ.Infrastructure.AI.Plugins;
-using PTJ.Infrastructure.Persistence; // Added
-using PTJ.Domain.Entities; // Added
+using PTJ.Infrastructure.Persistence; 
+using PTJ.Domain.Entities; 
 
 namespace PTJ.Infrastructure.Services;
 
 public class AIChatService : IAIChatService
 {
+    private readonly IConfiguration _configuration;
     private readonly Kernel _kernel;
     private readonly AppDbContext _dbContext;
     private readonly JobSearchPlugin _jobSearchPlugin;
@@ -25,7 +27,8 @@ public class AIChatService : IAIChatService
         JobSearchPlugin jobSearchPlugin,
         IdentityPlugin identityPlugin,
         ProfilePlugin profilePlugin,
-        JobDetailPlugin jobDetailPlugin)
+        JobDetailPlugin jobDetailPlugin,
+        IConfiguration configuration)
     {
         _kernel = kernel;
         _dbContext = dbContext;
@@ -33,6 +36,7 @@ public class AIChatService : IAIChatService
         _identityPlugin = identityPlugin;
         _profilePlugin = profilePlugin;
         _jobDetailPlugin = jobDetailPlugin;
+        _configuration = configuration;
     }
 
     public async Task<Result> RestartSessionAsync(int userId, CancellationToken cancellationToken = default)
@@ -170,7 +174,19 @@ public class AIChatService : IAIChatService
         selectedMessages.Reverse(); // Restore Chronological Order
 
         var history = new ChatHistory();
-        // history.AddSystemMessage("You are a helpful assistant...");
+        
+        // --- ADD SYSTEM PROMPT HERE ---
+        var systemPrompt = _configuration["AI:OpenAI:SystemInstructions"];
+        
+        if (string.IsNullOrWhiteSpace(systemPrompt))
+        {
+            // Default Fallback
+            systemPrompt = """
+                You are a helpful AI assistant.
+                """;
+        }
+
+        history.AddSystemMessage(systemPrompt);
 
         foreach (var msg in selectedMessages)
         {

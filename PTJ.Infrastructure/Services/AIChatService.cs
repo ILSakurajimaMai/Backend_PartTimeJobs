@@ -6,8 +6,8 @@ using Microsoft.Extensions.Configuration; // Added
 using PTJ.Application.Common;
 using PTJ.Application.Services;
 using PTJ.Infrastructure.AI.Plugins;
-using PTJ.Infrastructure.Persistence; 
-using PTJ.Domain.Entities; 
+using PTJ.Infrastructure.Persistence;
+using PTJ.Domain.Entities;
 
 namespace PTJ.Infrastructure.Services;
 
@@ -22,7 +22,7 @@ public class AIChatService : IAIChatService
     private readonly JobDetailPlugin _jobDetailPlugin;
 
     public AIChatService(
-        Kernel kernel, 
+        Kernel kernel,
         AppDbContext dbContext,
         JobSearchPlugin jobSearchPlugin,
         IdentityPlugin identityPlugin,
@@ -54,7 +54,7 @@ public class AIChatService : IAIChatService
             }
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
-        
+
         return Result.SuccessResult("Conversation restarted successfully.");
     }
 
@@ -69,8 +69,8 @@ public class AIChatService : IAIChatService
             var session = await GetOrCreateActiveSessionAsync(userId, cancellationToken);
 
             // 3. Build History Context
-            var chatHistory = await BuildChatHistoryAsync(session.Id, cancellationToken);
-            
+            var chatHistory = await BuildChatHistoryAsync(session.Id, userId, cancellationToken);
+
             // Add current user message
             chatHistory.AddUserMessage(userMessage);
 
@@ -85,7 +85,7 @@ public class AIChatService : IAIChatService
             // 5. Invoke Chat Completion
             var chatCompletionService = _kernel.GetRequiredService<IChatCompletionService>();
             var result = await chatCompletionService.GetChatMessageContentAsync(chatHistory, settings, _kernel, cancellationToken);
-            
+
             var responseContent = result.Content ?? "";
 
             // 6. Save Messages to DB
@@ -147,11 +147,11 @@ public class AIChatService : IAIChatService
         return session;
     }
 
-    private async Task<ChatHistory> BuildChatHistoryAsync(int sessionId, CancellationToken ct)
+    private async Task<ChatHistory> BuildChatHistoryAsync(int sessionId, int userId, CancellationToken ct)
     {
         // Limit: 20000 tokens (approx 60000 chars)
         const int MAX_CHARS = 60000;
-        
+
         // Fetch last 50 messages
         var messages = await _dbContext.AIChatMessages
             .Where(m => m.SessionId == sessionId)
@@ -166,7 +166,7 @@ public class AIChatService : IAIChatService
         {
             int len = msg.Content?.Length ?? 0;
             if (currentChars + len > MAX_CHARS) break;
-            
+
             selectedMessages.Add(msg);
             currentChars += len;
         }
@@ -174,10 +174,10 @@ public class AIChatService : IAIChatService
         selectedMessages.Reverse(); // Restore Chronological Order
 
         var history = new ChatHistory();
-        
+
         // --- ADD SYSTEM PROMPT HERE ---
         var systemPrompt = _configuration["AI:OpenAI:SystemInstructions"];
-        
+
         if (string.IsNullOrWhiteSpace(systemPrompt))
         {
             // Default Fallback
@@ -185,6 +185,9 @@ public class AIChatService : IAIChatService
                 You are a helpful AI assistant.
                 """;
         }
+
+        // Inject UserID into system prompt
+        systemPrompt += $"\n\n[System Info]: The user you are chatting with has UserID: {userId}.";
 
         history.AddSystemMessage(systemPrompt);
 

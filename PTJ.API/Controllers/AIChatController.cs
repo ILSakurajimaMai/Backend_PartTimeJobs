@@ -11,10 +11,12 @@ namespace PTJ.API.Controllers;
 public class AIChatController : ControllerBase
 {
     private readonly IAIChatService _aiChatService;
+    private readonly IActivityLogService _activityLogService;
 
-    public AIChatController(IAIChatService aiChatService)
+    public AIChatController(IAIChatService aiChatService, IActivityLogService activityLogService)
     {
         _aiChatService = aiChatService;
+        _activityLogService = activityLogService;
     }
 
     [HttpPost("message")]
@@ -29,11 +31,23 @@ public class AIChatController : ControllerBase
             return Unauthorized();
         }
 
-        // Pass cancellation token
         var result = await _aiChatService.ChatAsync(userId, request.Message, HttpContext.RequestAborted);
 
         if (!result.Success)
-            return BadRequest(new { errors = result.Message ?? "Unknown error" }); 
+            return BadRequest(new { errors = result.Message ?? "Unknown error" });
+
+        var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "0.0.0.0";
+        var userAgent = Request.Headers["User-Agent"].ToString();
+        await _activityLogService.LogActivityAsync(
+            userId,
+            "POST",
+            "/api/aichat/message",
+            null,
+            ipAddress,
+            userAgent,
+            200,
+            0,
+            $"User gửi tin nhắn AI: {request.Message.Substring(0, Math.Min(50, request.Message.Length))}...");
 
         return Ok(new { response = result.Data });
     }
@@ -51,6 +65,19 @@ public class AIChatController : ControllerBase
 
         if (!result.Success)
             return BadRequest(new { errors = result.Message ?? "Failed to restart conversation" });
+
+        var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "0.0.0.0";
+        var userAgent = Request.Headers["User-Agent"].ToString();
+        await _activityLogService.LogActivityAsync(
+            userId,
+            "POST",
+            "/api/aichat/restart",
+            null,
+            ipAddress,
+            userAgent,
+            200,
+            0,
+            "User khởi động lại phiên chat AI");
 
         return Ok(new { message = result.Message });
     }

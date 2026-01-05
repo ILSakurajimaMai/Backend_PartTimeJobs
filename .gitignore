@@ -11,6 +11,7 @@ dangnhap.txt
 .claude
 test_api.py
 PTJ.API/appsettings.json
+PTJ.API/appsettings.Development.json
 
 # Build results
 [Dd]ebug/
@@ -27,7 +28,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
-
+nul
 # Visual Studio cache/options directory
 .vs/
 

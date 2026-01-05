@@ -32,6 +32,11 @@ public class GenericRepository<T> : IRepository<T> where T : BaseEntity
         return await _dbSet.Where(predicate).ToListAsync(cancellationToken);
     }
 
+    public virtual IQueryable<T> GetQueryable()
+    {
+        return _dbSet.AsQueryable();
+    }
+
     public virtual async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
     {
         return await _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);

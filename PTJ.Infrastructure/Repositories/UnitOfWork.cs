@@ -40,6 +40,10 @@ public class UnitOfWork : IUnitOfWork
     // Files
     private IRepository<FileEntity>? _files;
 
+    // Chat
+    private IRepository<ChatConversation>? _chatConversations;
+    private IRepository<ChatMessage>? _chatMessages;
+
     public UnitOfWork(AppDbContext context)
     {
         _context = context;
@@ -74,6 +78,10 @@ public class UnitOfWork : IUnitOfWork
 
     // Files
     public IRepository<FileEntity> Files => _files ??= new GenericRepository<FileEntity>(_context);
+
+    // Chat
+    public IRepository<ChatConversation> ChatConversations => _chatConversations ??= new GenericRepository<ChatConversation>(_context);
+    public IRepository<ChatMessage> ChatMessages => _chatMessages ??= new GenericRepository<ChatMessage>(_context);
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PTJ.API.Filters;
+using PTJ.API.Hubs;
 using PTJ.API.Middleware;
 using PTJ.Application.Mapping;
 using PTJ.Application.Services;
@@ -11,8 +12,23 @@ using PTJ.Domain.Interfaces;
 using PTJ.Infrastructure.Persistence;
 using PTJ.Infrastructure.Repositories;
 using PTJ.Infrastructure.Services;
+using PTJ.Infrastructure.AI.Plugins;
+using Microsoft.SemanticKernel;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Serilog
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .Enrich.WithMachineName()
+    .Enrich.WithEnvironmentName()
+    .WriteTo.Console()
+    .WriteTo.File("logs/app-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Add services to the container
 builder.Services.AddControllers(options =>
@@ -109,26 +125,76 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
         ClockSkew = TimeSpan.Zero
     };
+
+    // Configure JWT for SignalR
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/chat"))
+            {
+                context.Token = accessToken;
+            }
+
+            return Task.CompletedTask;
+        }
+    };
 });
 
 builder.Services.AddAuthorization();
 
-// Configure CORS
+// Configure CORS with environment-specific policies
 builder.Services.AddCors(options =>
 {
+    var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
+
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        if (builder.Environment.IsDevelopment())
+        {
+            // Development: Allow configured origins or localhost if empty
+            if (allowedOrigins.Length > 0)
+            {
+                policy.WithOrigins(allowedOrigins);
+            }
+            else
+            {
+                // Fallback to localhost patterns for development
+                policy.SetIsOriginAllowed(origin =>
+                    origin.StartsWith("http://localhost:", StringComparison.OrdinalIgnoreCase) ||
+                    origin.StartsWith("https://localhost:", StringComparison.OrdinalIgnoreCase) ||
+                    origin.StartsWith("http://127.0.0.1:", StringComparison.OrdinalIgnoreCase) ||
+                    origin.StartsWith("https://127.0.0.1:", StringComparison.OrdinalIgnoreCase));
+            }
+        }
+        else
+        {
+            // Production: Only allow whitelisted origins
+            if (allowedOrigins.Length > 0)
+            {
+                policy.WithOrigins(allowedOrigins);
+            }
+            else
+            {
+                // No origins allowed if not configured (fail-safe)
+                policy.WithOrigins("https://example.com");
+            }
+        }
+
+        policy.AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials(); // Required for SignalR
     });
 });
 
+// Add SignalR
+builder.Services.AddSignalR();
+
 // Register repositories and unit of work
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-// Register filters
-builder.Services.AddScoped<AuthorizeCompanyOwnerFilter>();
 
 // Register services
 builder.Services.AddScoped<IJwtService, JwtService>();
@@ -138,7 +204,27 @@ builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
 builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
+builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<ISearchService, SearchService>();
+
+// Register logging services
+builder.Services.AddScoped<IActivityLogService, ActivityLogService>();
+builder.Services.AddScoped<IErrorLogService, ErrorLogService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
+
+// Register AI Services
+builder.Services.AddScoped<JobSearchPlugin>();
+builder.Services.AddScoped<IdentityPlugin>();
+builder.Services.AddScoped<ProfilePlugin>();
+builder.Services.AddScoped<JobDetailPlugin>();
+builder.Services.AddScoped<IAIChatService, AIChatService>();
+
+builder.Services.AddKernel()
+    .AddOpenAIChatCompletion(
+        modelId: builder.Configuration["AI:OpenAI:ModelId"] ?? "qwen/qwen-2.5-vl-7b-instruct:free",
+        apiKey: builder.Configuration["AI:OpenAI:ApiKey"] ?? throw new InvalidOperationException("API Key not found in configuration"),
+        endpoint: new Uri(builder.Configuration["AI:OpenAI:Endpoint"] ?? "http://localhost:8000/v1")
+    );
 
 var app = builder.Build();
 
@@ -152,6 +238,9 @@ if (app.Environment.IsDevelopment())
 // Use global exception handling middleware
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
+// Use request logging middleware (logs all HTTP requests with user info)
+app.UseMiddleware<RequestLoggingMiddleware>();
+
 app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
@@ -163,5 +252,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<ChatHub>("/hubs/chat");
 
 app.Run();

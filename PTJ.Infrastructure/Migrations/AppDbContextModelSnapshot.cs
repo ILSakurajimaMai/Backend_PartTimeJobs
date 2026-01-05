@@ -22,6 +22,119 @@ namespace PTJ.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("PTJ.Domain.Entities.AIChatMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeletedBy")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
+
+                    b.Property<int>("SessionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TokenCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SessionId");
+
+                    b.ToTable("AIChatMessages");
+                });
+
+            modelBuilder.Entity("PTJ.Domain.Entities.AIChatSession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeletedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("EndedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AIChatSessions");
+                });
+
             modelBuilder.Entity("PTJ.Domain.Entities.Application", b =>
                 {
                     b.Property<int>("Id")
@@ -208,7 +321,7 @@ namespace PTJ.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 11, 17, 6, 16, 44, 291, DateTimeKind.Utc).AddTicks(4812),
+                            CreatedAt = new DateTime(2026, 1, 4, 3, 56, 23, 141, DateTimeKind.Utc).AddTicks(1843),
                             Description = "Application submitted",
                             DisplayOrder = 1,
                             IsDeleted = false,
@@ -218,7 +331,7 @@ namespace PTJ.Infrastructure.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 11, 17, 6, 16, 44, 291, DateTimeKind.Utc).AddTicks(5239),
+                            CreatedAt = new DateTime(2026, 1, 4, 3, 56, 23, 141, DateTimeKind.Utc).AddTicks(2298),
                             Description = "Under review",
                             DisplayOrder = 2,
                             IsDeleted = false,
@@ -228,7 +341,7 @@ namespace PTJ.Infrastructure.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 11, 17, 6, 16, 44, 291, DateTimeKind.Utc).AddTicks(5241),
+                            CreatedAt = new DateTime(2026, 1, 4, 3, 56, 23, 141, DateTimeKind.Utc).AddTicks(2299),
                             Description = "Shortlisted for interview",
                             DisplayOrder = 3,
                             IsDeleted = false,
@@ -238,7 +351,7 @@ namespace PTJ.Infrastructure.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 11, 17, 6, 16, 44, 291, DateTimeKind.Utc).AddTicks(5242),
+                            CreatedAt = new DateTime(2026, 1, 4, 3, 56, 23, 141, DateTimeKind.Utc).AddTicks(2301),
                             Description = "Interview scheduled",
                             DisplayOrder = 4,
                             IsDeleted = false,
@@ -248,7 +361,7 @@ namespace PTJ.Infrastructure.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 11, 17, 6, 16, 44, 291, DateTimeKind.Utc).AddTicks(5244),
+                            CreatedAt = new DateTime(2026, 1, 4, 3, 56, 23, 141, DateTimeKind.Utc).AddTicks(2302),
                             Description = "Job offer made",
                             DisplayOrder = 5,
                             IsDeleted = false,
@@ -258,7 +371,7 @@ namespace PTJ.Infrastructure.Migrations
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 11, 17, 6, 16, 44, 291, DateTimeKind.Utc).AddTicks(5245),
+                            CreatedAt = new DateTime(2026, 1, 4, 3, 56, 23, 141, DateTimeKind.Utc).AddTicks(2304),
                             Description = "Offer accepted",
                             DisplayOrder = 6,
                             IsDeleted = false,
@@ -268,7 +381,7 @@ namespace PTJ.Infrastructure.Migrations
                         new
                         {
                             Id = 7,
-                            CreatedAt = new DateTime(2025, 11, 17, 6, 16, 44, 291, DateTimeKind.Utc).AddTicks(5247),
+                            CreatedAt = new DateTime(2026, 1, 4, 3, 56, 23, 141, DateTimeKind.Utc).AddTicks(2305),
                             Description = "Application rejected",
                             DisplayOrder = 7,
                             IsDeleted = false,
@@ -278,7 +391,7 @@ namespace PTJ.Infrastructure.Migrations
                         new
                         {
                             Id = 8,
-                            CreatedAt = new DateTime(2025, 11, 17, 6, 16, 44, 291, DateTimeKind.Utc).AddTicks(5248),
+                            CreatedAt = new DateTime(2026, 1, 4, 3, 56, 23, 141, DateTimeKind.Utc).AddTicks(2306),
                             Description = "Application withdrawn",
                             DisplayOrder = 8,
                             IsDeleted = false,
@@ -288,13 +401,150 @@ namespace PTJ.Infrastructure.Migrations
                         new
                         {
                             Id = 9,
-                            CreatedAt = new DateTime(2025, 11, 17, 6, 16, 44, 291, DateTimeKind.Utc).AddTicks(5250),
+                            CreatedAt = new DateTime(2026, 1, 4, 3, 56, 23, 141, DateTimeKind.Utc).AddTicks(2308),
                             Description = "Application expired",
                             DisplayOrder = 9,
                             IsDeleted = false,
                             Name = "Expired",
                             RowVersion = new byte[] { 0 }
                         });
+                });
+
+            modelBuilder.Entity("PTJ.Domain.Entities.ChatConversation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeletedBy")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmployerId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEmployerTyping")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsStudentTyping")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("JobPostId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LastMessage")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime?>("LastMessageAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobPostId");
+
+                    b.HasIndex("LastMessageAt");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("EmployerId", "StudentId");
+
+                    b.ToTable("ChatConversations", "chat");
+                });
+
+            modelBuilder.Entity("PTJ.Domain.Entities.ChatMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<int>("ConversationId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeletedBy")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ReadAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConversationId");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("SenderId");
+
+                    b.HasIndex("ConversationId", "IsRead");
+
+                    b.ToTable("ChatMessages", "chat");
                 });
 
             modelBuilder.Entity("PTJ.Domain.Entities.Company", b =>
@@ -576,6 +826,9 @@ namespace PTJ.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("CreatedBy")
+                        .HasColumnType("int");
+
                     b.Property<int>("CreatedByUserId")
                         .HasColumnType("int");
 
@@ -655,8 +908,6 @@ namespace PTJ.Infrastructure.Migrations
                     b.HasIndex("CompanyId");
 
                     b.HasIndex("CreatedAt");
-
-                    b.HasIndex("CreatedByUserId");
 
                     b.HasIndex("Status");
 
@@ -753,6 +1004,47 @@ namespace PTJ.Infrastructure.Migrations
                     b.HasIndex("JobPostId");
 
                     b.ToTable("JobShifts", "jobs");
+                });
+
+            modelBuilder.Entity("PTJ.Domain.Entities.Permission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Permissions", "auth");
                 });
 
             modelBuilder.Entity("PTJ.Domain.Entities.Profile", b =>
@@ -1201,7 +1493,7 @@ namespace PTJ.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 11, 17, 6, 16, 44, 327, DateTimeKind.Utc).AddTicks(3043),
+                            CreatedAt = new DateTime(2026, 1, 4, 3, 56, 23, 168, DateTimeKind.Utc).AddTicks(2379),
                             Description = "Administrator",
                             IsDeleted = false,
                             Name = "ADMIN",
@@ -1210,7 +1502,7 @@ namespace PTJ.Infrastructure.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 11, 17, 6, 16, 44, 327, DateTimeKind.Utc).AddTicks(3048),
+                            CreatedAt = new DateTime(2026, 1, 4, 3, 56, 23, 168, DateTimeKind.Utc).AddTicks(2385),
                             Description = "Employer/Company",
                             IsDeleted = false,
                             Name = "EMPLOYER",
@@ -1219,12 +1511,103 @@ namespace PTJ.Infrastructure.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 11, 17, 6, 16, 44, 327, DateTimeKind.Utc).AddTicks(3050),
+                            CreatedAt = new DateTime(2026, 1, 4, 3, 56, 23, 168, DateTimeKind.Utc).AddTicks(2387),
                             Description = "Student/Job Seeker",
                             IsDeleted = false,
                             Name = "STUDENT",
                             RowVersion = new byte[] { 0 }
                         });
+                });
+
+            modelBuilder.Entity("PTJ.Domain.Entities.RolePermission", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RoleId", "PermissionId");
+
+                    b.HasIndex("PermissionId");
+
+                    b.ToTable("RolePermissions", "auth");
+                });
+
+            modelBuilder.Entity("PTJ.Domain.Entities.SystemErrorLog", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("AdditionalData")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExceptionType")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("HttpMethod")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("InnerException")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IpAddress")
+                        .HasMaxLength(45)
+                        .HasColumnType("nvarchar(45)");
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("QueryString")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("RequestPath")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Source")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("StackTrace")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserAgent")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Level");
+
+                    b.HasIndex("Timestamp")
+                        .IsDescending();
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("Level", "Timestamp")
+                        .IsDescending();
+
+                    b.ToTable("SystemErrorLogs", "logging");
                 });
 
             modelBuilder.Entity("PTJ.Domain.Entities.User", b =>
@@ -1303,6 +1686,65 @@ namespace PTJ.Infrastructure.Migrations
                     b.ToTable("Users", "auth");
                 });
 
+            modelBuilder.Entity("PTJ.Domain.Entities.UserActivityLog", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("AdditionalData")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("DurationMs")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("HttpMethod")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("IpAddress")
+                        .IsRequired()
+                        .HasMaxLength(45)
+                        .HasColumnType("nvarchar(45)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("QueryString")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int>("StatusCode")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserAgent")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Timestamp")
+                        .IsDescending();
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserId", "Timestamp")
+                        .IsDescending();
+
+                    b.ToTable("UserActivityLogs", "logging");
+                });
+
             modelBuilder.Entity("PTJ.Domain.Entities.UserRole", b =>
                 {
                     b.Property<int>("UserId")
@@ -1338,6 +1780,28 @@ namespace PTJ.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRoles", "auth");
+                });
+
+            modelBuilder.Entity("PTJ.Domain.Entities.AIChatMessage", b =>
+                {
+                    b.HasOne("PTJ.Domain.Entities.AIChatSession", "Session")
+                        .WithMany("Messages")
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Session");
+                });
+
+            modelBuilder.Entity("PTJ.Domain.Entities.AIChatSession", b =>
+                {
+                    b.HasOne("PTJ.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PTJ.Domain.Entities.Application", b =>
@@ -1408,6 +1872,51 @@ namespace PTJ.Infrastructure.Migrations
                     b.Navigation("ToStatus");
                 });
 
+            modelBuilder.Entity("PTJ.Domain.Entities.ChatConversation", b =>
+                {
+                    b.HasOne("PTJ.Domain.Entities.User", "Employer")
+                        .WithMany()
+                        .HasForeignKey("EmployerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PTJ.Domain.Entities.JobPost", "JobPost")
+                        .WithMany()
+                        .HasForeignKey("JobPostId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("PTJ.Domain.Entities.User", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Employer");
+
+                    b.Navigation("JobPost");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("PTJ.Domain.Entities.ChatMessage", b =>
+                {
+                    b.HasOne("PTJ.Domain.Entities.ChatConversation", "Conversation")
+                        .WithMany("Messages")
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PTJ.Domain.Entities.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Conversation");
+
+                    b.Navigation("Sender");
+                });
+
             modelBuilder.Entity("PTJ.Domain.Entities.Company", b =>
                 {
                     b.HasOne("PTJ.Domain.Entities.User", "Owner")
@@ -1463,15 +1972,7 @@ namespace PTJ.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PTJ.Domain.Entities.User", "CreatedBy")
-                        .WithMany("JobPosts")
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Company");
-
-                    b.Navigation("CreatedBy");
                 });
 
             modelBuilder.Entity("PTJ.Domain.Entities.JobPostSkill", b =>
@@ -1562,6 +2063,45 @@ namespace PTJ.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("PTJ.Domain.Entities.RolePermission", b =>
+                {
+                    b.HasOne("PTJ.Domain.Entities.Permission", "Permission")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PTJ.Domain.Entities.Role", "Role")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("PTJ.Domain.Entities.SystemErrorLog", b =>
+                {
+                    b.HasOne("PTJ.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PTJ.Domain.Entities.UserActivityLog", b =>
+                {
+                    b.HasOne("PTJ.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PTJ.Domain.Entities.UserRole", b =>
                 {
                     b.HasOne("PTJ.Domain.Entities.Role", "Role")
@@ -1581,6 +2121,11 @@ namespace PTJ.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("PTJ.Domain.Entities.AIChatSession", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
             modelBuilder.Entity("PTJ.Domain.Entities.Application", b =>
                 {
                     b.Navigation("History");
@@ -1589,6 +2134,11 @@ namespace PTJ.Infrastructure.Migrations
             modelBuilder.Entity("PTJ.Domain.Entities.ApplicationStatusLookup", b =>
                 {
                     b.Navigation("Applications");
+                });
+
+            modelBuilder.Entity("PTJ.Domain.Entities.ChatConversation", b =>
+                {
+                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("PTJ.Domain.Entities.Company", b =>
@@ -1603,6 +2153,11 @@ namespace PTJ.Infrastructure.Migrations
                     b.Navigation("RequiredSkills");
 
                     b.Navigation("Shifts");
+                });
+
+            modelBuilder.Entity("PTJ.Domain.Entities.Permission", b =>
+                {
+                    b.Navigation("RolePermissions");
                 });
 
             modelBuilder.Entity("PTJ.Domain.Entities.Profile", b =>
@@ -1620,14 +2175,14 @@ namespace PTJ.Infrastructure.Migrations
 
             modelBuilder.Entity("PTJ.Domain.Entities.Role", b =>
                 {
+                    b.Navigation("RolePermissions");
+
                     b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("PTJ.Domain.Entities.User", b =>
                 {
                     b.Navigation("Company");
-
-                    b.Navigation("JobPosts");
 
                     b.Navigation("Profile");
 

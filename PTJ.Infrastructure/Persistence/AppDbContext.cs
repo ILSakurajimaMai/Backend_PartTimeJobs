@@ -14,13 +14,18 @@ public class AppDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.ConfigureWarnings(warnings =>
-            warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
+        {
+            warnings.Ignore(RelationalEventId.PendingModelChangesWarning);
+            warnings.Ignore(CoreEventId.PossibleIncorrectRequiredNavigationWithQueryFilterInteractionWarning);
+        });
     }
 
     // Auth
     public DbSet<User> Users => Set<User>();
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<UserRole> UserRoles => Set<UserRole>();
+    public DbSet<Permission> Permissions => Set<Permission>();
+    public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     // Companies
@@ -46,6 +51,18 @@ public class AppDbContext : DbContext
 
     // Files
     public DbSet<FileEntity> Files => Set<FileEntity>();
+
+    // Chat
+    public DbSet<ChatConversation> ChatConversations => Set<ChatConversation>();
+    public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
+
+    // AI Chat
+    public DbSet<AIChatSession> AIChatSessions => Set<AIChatSession>();
+    public DbSet<AIChatMessage> AIChatMessages => Set<AIChatMessage>();
+
+    // Logging
+    public DbSet<UserActivityLog> UserActivityLogs => Set<UserActivityLog>();
+    public DbSet<SystemErrorLog> SystemErrorLogs => Set<SystemErrorLog>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

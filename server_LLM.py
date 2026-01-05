@@ -64,7 +64,7 @@ async def chat_completions(request: Request):
     headers = {
         "Authorization": auth_header,
         "Content-Type": "application/json",
-        "HTTP-Referer": "http://localhost:8000",
+        "HTTP-Referer": "http://localhost:8001",
         "X-Title": "Local Logging Proxy"
     }
 
@@ -121,4 +121,4 @@ if __name__ == "__main__":
     import uvicorn
     # Log thông báo khởi động
     logger.info(f"Starting Proxy Server. Target: {TARGET_MODEL}")
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8001)

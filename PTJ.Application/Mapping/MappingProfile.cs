@@ -45,7 +45,8 @@ public class MappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Company != null ? src.Company.Name : string.Empty))
             .ForMember(dest => dest.CompanyLogoUrl, opt => opt.MapFrom(src => src.Company != null ? src.Company.LogoUrl : string.Empty))
             .ForMember(dest => dest.Shifts, opt => opt.MapFrom(src => src.Shifts))
-            .ForMember(dest => dest.RequiredSkills, opt => opt.MapFrom(src => src.RequiredSkills.Select(s => s.SkillName).ToList()));
+            .ForMember(dest => dest.RequiredSkills, opt => opt.MapFrom(src => src.RequiredSkills.Select(s => s.SkillName).ToList()))
+            .ForMember(dest => dest.EmployerId, opt => opt.MapFrom(src => src.CreatedByUserId));
 
         CreateMap<CreateJobPostDto, JobPost>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())

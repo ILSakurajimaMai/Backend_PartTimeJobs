@@ -24,10 +24,10 @@ public class FilesController : ControllerBase
     /// Upload a file (avatar, resume, certificate, logo)
     /// </summary>
     [HttpPost("upload")]
-    public async Task<IActionResult> Upload([FromForm] FileUploadRequest request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> Upload(IFormFile file, [FromForm] string? folder = "general", CancellationToken cancellationToken = default)
     {
         var userId = GetUserId();
-        var result = await _fileStorageService.UploadFileAsync(request.File, request.Folder ?? "general", userId, cancellationToken);
+        var result = await _fileStorageService.UploadFileAsync(file, folder ?? "general", userId, cancellationToken);
 
         if (!result.Success)
         {
@@ -45,7 +45,7 @@ public class FilesController : ControllerBase
             userAgent,
             200,
             0,
-            $"User upload file: {request.File.FileName} vào folder: {request.Folder ?? "general"}");
+            $"User upload file: {file.FileName} vào folder: {folder ?? "general"}");
 
         return Ok(result);
     }
@@ -82,9 +82,10 @@ public class FilesController : ControllerBase
     }
 
     /// <summary>
-    /// Download a file (requires authentication)
+    /// Download a file (no verification required)
     /// </summary>
     [HttpGet("download")]
+    [AllowAnonymous]
     public async Task<IActionResult> Download([FromQuery] string fileUrl, CancellationToken cancellationToken)
     {
         var userId = GetUserId();

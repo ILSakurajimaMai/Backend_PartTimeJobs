@@ -189,7 +189,6 @@ D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.API\obj\Debug\net10.0\refint\PTJ
 D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.API\obj\Debug\net10.0\PTJ.API.pdb
 D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.API\obj\Debug\net10.0\PTJ.API.genruntimeconfig.cache
 D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.API\obj\Debug\net10.0\ref\PTJ.API.dll
-C:\My_file\Code\C_sharp\Backend_PartTimeJobs\PTJ.API\bin\Debug\net10.0\appsettings.json
 C:\My_file\Code\C_sharp\Backend_PartTimeJobs\PTJ.API\bin\Debug\net10.0\appsettings.Development.exam copy.json
 C:\My_file\Code\C_sharp\Backend_PartTimeJobs\PTJ.API\bin\Debug\net10.0\appsettings.Development.json
 C:\My_file\Code\C_sharp\Backend_PartTimeJobs\PTJ.API\bin\Debug\net10.0\PTJ.API.staticwebassets.endpoints.json

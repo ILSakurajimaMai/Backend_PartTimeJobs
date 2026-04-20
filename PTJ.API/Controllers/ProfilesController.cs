@@ -50,14 +50,14 @@ public class ProfilesController : ControllerBase
     }
 
     /// <summary>
-    /// Get my profile (authenticated user)
+    /// Get my default profile (authenticated user)
     /// </summary>
     [Authorize(Roles = "STUDENT,ADMIN")]
     [HttpGet("me")]
     public async Task<IActionResult> GetMyProfile(CancellationToken cancellationToken)
     {
         var userId = GetUserId();
-        var result = await _profileService.GetByUserIdAsync(userId, cancellationToken);
+        var result = await _profileService.GetDefaultByUserIdAsync(userId, cancellationToken);
 
         if (!result.Success)
         {
@@ -81,14 +81,40 @@ public class ProfilesController : ControllerBase
     }
 
     /// <summary>
-    /// Create or update profile (Student only)
+    /// Get all of my profiles (authenticated user)
+    /// </summary>
+    [Authorize(Roles = "STUDENT,ADMIN")]
+    [HttpGet("my")]
+    public async Task<IActionResult> GetMyProfiles(CancellationToken cancellationToken)
+    {
+        var userId = GetUserId();
+        var result = await _profileService.GetByUserIdAsync(userId, cancellationToken);
+
+        var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "0.0.0.0";
+        var userAgent = Request.Headers["User-Agent"].ToString();
+        await _activityLogService.LogActivityAsync(
+            userId,
+            "GET",
+            "/api/profiles/my",
+            null,
+            ipAddress,
+            userAgent,
+            200,
+            0,
+            "Student xem danh sach CV cua minh");
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Create a profile (Student only)
     /// </summary>
     [Authorize(Roles = "STUDENT,ADMIN")]
     [HttpPost]
-    public async Task<IActionResult> CreateOrUpdate([FromBody] ProfileDto dto, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create([FromBody] ProfileDto dto, CancellationToken cancellationToken)
     {
         var userId = GetUserId();
-        var result = await _profileService.CreateOrUpdateAsync(userId, dto, cancellationToken);
+        var result = await _profileService.CreateAsync(userId, dto, cancellationToken);
 
         if (!result.Success)
         {
@@ -106,7 +132,69 @@ public class ProfilesController : ControllerBase
             userAgent,
             200,
             0,
-            "Student tạo/cập nhật profile của mình");
+            "Student tao CV moi");
+
+        return CreatedAtAction(nameof(GetById), new { id = result.Data?.Id }, result);
+    }
+
+    /// <summary>
+    /// Update a profile (Student only)
+    /// </summary>
+    [Authorize(Roles = "STUDENT,ADMIN")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, [FromBody] ProfileDto dto, CancellationToken cancellationToken)
+    {
+        var userId = GetUserId();
+        var result = await _profileService.UpdateAsync(id, userId, dto, cancellationToken);
+
+        if (!result.Success)
+        {
+            return BadRequest(result);
+        }
+
+        var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "0.0.0.0";
+        var userAgent = Request.Headers["User-Agent"].ToString();
+        await _activityLogService.LogActivityAsync(
+            userId,
+            "PUT",
+            $"/api/profiles/{id}",
+            null,
+            ipAddress,
+            userAgent,
+            200,
+            0,
+            $"Student cap nhat CV ID: {id}");
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Set a profile as default (Student only)
+    /// </summary>
+    [Authorize(Roles = "STUDENT,ADMIN")]
+    [HttpPost("{id}/set-default")]
+    public async Task<IActionResult> SetDefault(int id, CancellationToken cancellationToken)
+    {
+        var userId = GetUserId();
+        var result = await _profileService.SetDefaultAsync(id, userId, cancellationToken);
+
+        if (!result.Success)
+        {
+            return BadRequest(result);
+        }
+
+        var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "0.0.0.0";
+        var userAgent = Request.Headers["User-Agent"].ToString();
+        await _activityLogService.LogActivityAsync(
+            userId,
+            "POST",
+            $"/api/profiles/{id}/set-default",
+            null,
+            ipAddress,
+            userAgent,
+            200,
+            0,
+            $"Student dat CV mac dinh ID: {id}");
 
         return Ok(result);
     }

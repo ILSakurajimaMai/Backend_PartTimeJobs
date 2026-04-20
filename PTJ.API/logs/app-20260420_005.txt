@@ -71,3 +71,4 @@ INSERT INTO [logging].[UserActivityLogs] ([AdditionalData], [DurationMs], [HttpM
 OUTPUT INSERTED.[Id]
 VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
 2026-04-20 17:09:08.870 +07:00 [INF] HTTP GET /api/Profiles/4 responded 200 in 404ms | User: 4 | IP: ::1
+[2026-04-20 17:47:02.899 +07:00] [WRN] The WebRootPath was not found: C:\My_file\Code\C_sharp\Backend_PartTimeJobs\PTJ.API\wwwroot. Static files may be unavailable. {"EventId":{"Id":16,"Name":"WebRootPathNotFound"},"SourceContext":"Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}

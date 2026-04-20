@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PTJ.Application.Common;
 using PTJ.Application.DTOs.Application;
 using PTJ.Application.Services;
 
@@ -88,17 +89,25 @@ public class ApplicationsController : ControllerBase
     /// </summary>
     [Authorize(Roles = "STUDENT,ADMIN")]
     [HttpGet("me")]
-    public async Task<IActionResult> GetMyApplications([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetMyApplications([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int? profileId = null, CancellationToken cancellationToken = default)
     {
         var userId = GetUserId();
+        Result<PaginatedList<ApplicationDto>> result;
 
-        var profileResult = await _profileService.GetByUserIdAsync(userId, cancellationToken);
-        if (!profileResult.Success || profileResult.Data == null)
+        if (profileId.HasValue)
         {
-            return BadRequest(new { Success = false, Message = "Profile not found" });
-        }
+            var profileResult = await _profileService.GetByIdAsync(profileId.Value, cancellationToken);
+            if (!profileResult.Success || profileResult.Data == null || profileResult.Data.UserId != userId)
+            {
+                return BadRequest(new { Success = false, Message = "Profile not found" });
+            }
 
-        var result = await _applicationService.GetByProfileIdAsync(profileResult.Data.Id, pageNumber, pageSize, cancellationToken);
+            result = await _applicationService.GetByProfileIdAsync(profileId.Value, pageNumber, pageSize, cancellationToken);
+        }
+        else
+        {
+            result = await _applicationService.GetByUserIdAsync(userId, pageNumber, pageSize, cancellationToken);
+        }
 
         if (!result.Success)
         {
@@ -111,7 +120,7 @@ public class ApplicationsController : ControllerBase
             userId,
             "GET",
             "/api/applications/me",
-            $"pageNumber={pageNumber}&pageSize={pageSize}",
+            $"pageNumber={pageNumber}&pageSize={pageSize}&profileId={profileId}",
             ipAddress,
             userAgent,
             200,

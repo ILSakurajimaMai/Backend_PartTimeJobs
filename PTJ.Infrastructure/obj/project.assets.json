@@ -4279,23 +4279,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Duong Son\\.nuget\\packages\\": {},
+    "C:\\Users\\IlSMai\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Flutter\\app_jobfind\\Backend_PartTimeJobs\\PTJ.Infrastructure\\PTJ.Infrastructure.csproj",
+      "projectUniqueName": "C:\\My_file\\Code\\C_sharp\\Backend_PartTimeJobs\\PTJ.Infrastructure\\PTJ.Infrastructure.csproj",
       "projectName": "PTJ.Infrastructure",
-      "projectPath": "D:\\Flutter\\app_jobfind\\Backend_PartTimeJobs\\PTJ.Infrastructure\\PTJ.Infrastructure.csproj",
-      "packagesPath": "C:\\Users\\Duong Son\\.nuget\\packages\\",
-      "outputPath": "D:\\Flutter\\app_jobfind\\Backend_PartTimeJobs\\PTJ.Infrastructure\\obj\\",
+      "projectPath": "C:\\My_file\\Code\\C_sharp\\Backend_PartTimeJobs\\PTJ.Infrastructure\\PTJ.Infrastructure.csproj",
+      "packagesPath": "C:\\Users\\IlSMai\\.nuget\\packages\\",
+      "outputPath": "C:\\My_file\\Code\\C_sharp\\Backend_PartTimeJobs\\PTJ.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Duong Son\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\IlSMai\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -4310,11 +4310,11 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "D:\\Flutter\\app_jobfind\\Backend_PartTimeJobs\\PTJ.Application\\PTJ.Application.csproj": {
-              "projectPath": "D:\\Flutter\\app_jobfind\\Backend_PartTimeJobs\\PTJ.Application\\PTJ.Application.csproj"
+            "C:\\My_file\\Code\\C_sharp\\Backend_PartTimeJobs\\PTJ.Application\\PTJ.Application.csproj": {
+              "projectPath": "C:\\My_file\\Code\\C_sharp\\Backend_PartTimeJobs\\PTJ.Application\\PTJ.Application.csproj"
             },
-            "D:\\Flutter\\app_jobfind\\Backend_PartTimeJobs\\PTJ.Domain\\PTJ.Domain.csproj": {
-              "projectPath": "D:\\Flutter\\app_jobfind\\Backend_PartTimeJobs\\PTJ.Domain\\PTJ.Domain.csproj"
+            "C:\\My_file\\Code\\C_sharp\\Backend_PartTimeJobs\\PTJ.Domain\\PTJ.Domain.csproj": {
+              "projectPath": "C:\\My_file\\Code\\C_sharp\\Backend_PartTimeJobs\\PTJ.Domain\\PTJ.Domain.csproj"
             }
           }
         }
@@ -4390,7 +4390,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.200-preview.0.26103.119/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.202/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",

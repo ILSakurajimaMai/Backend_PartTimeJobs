@@ -73,6 +73,24 @@ public class ApplicationService : IApplicationService
         return Result<PaginatedList<ApplicationDto>>.SuccessResult(result);
     }
 
+    public async Task<Result<PaginatedList<ApplicationDto>>> GetByUserIdAsync(int userId, int pageNumber, int pageSize, CancellationToken cancellationToken = default)
+    {
+        var query = _unitOfWork.Applications.GetQueryable()
+            .Where(a => a.Profile.UserId == userId);
+
+        var totalCount = await query.CountAsync(cancellationToken);
+
+        var items = await query
+            .OrderByDescending(a => a.AppliedAt)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ProjectTo<ApplicationDto>(_mapper.ConfigurationProvider)
+            .ToListAsync(cancellationToken);
+
+        var result = new PaginatedList<ApplicationDto>(items, totalCount, pageNumber, pageSize);
+        return Result<PaginatedList<ApplicationDto>>.SuccessResult(result);
+    }
+
     public async Task<Result<ApplicationDto>> CreateAsync(int userId, CreateApplicationDto dto, CancellationToken cancellationToken = default)
     {
         // Check if job post exists
@@ -82,14 +100,30 @@ public class ApplicationService : IApplicationService
             return Result<ApplicationDto>.FailureResult("Job post not found");
         }
 
-        // Get user's profile
-        var profile = await _unitOfWork.Profiles.FirstOrDefaultAsync(
-            p => p.UserId == userId,
-            cancellationToken);
+        PTJ.Domain.Entities.Profile? profile;
+        if (dto.ProfileId.HasValue)
+        {
+            profile = await _unitOfWork.Profiles.FirstOrDefaultAsync(
+                p => p.Id == dto.ProfileId.Value && p.UserId == userId,
+                cancellationToken);
+        }
+        else
+        {
+            profile = await _unitOfWork.Profiles.FirstOrDefaultAsync(
+                p => p.UserId == userId && p.IsDefault,
+                cancellationToken);
+
+            if (profile == null)
+            {
+                profile = await _unitOfWork.Profiles.FirstOrDefaultAsync(
+                    p => p.UserId == userId,
+                    cancellationToken);
+            }
+        }
 
         if (profile == null)
         {
-            return Result<ApplicationDto>.FailureResult("Please create a profile before applying");
+            return Result<ApplicationDto>.FailureResult("Please select a valid profile before applying");
         }
 
         // Check if already applied

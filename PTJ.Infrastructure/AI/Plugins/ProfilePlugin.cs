@@ -21,7 +21,7 @@ public class ProfilePlugin
         [Description("The ID of the current user.")] int userId
     )
     {
-        var result = await _profileService.GetByUserIdAsync(userId);
+        var result = await _profileService.GetDefaultByUserIdAsync(userId);
         
         if (!result.Success || result.Data == null)
         {
@@ -33,8 +33,9 @@ public class ProfilePlugin
         // Simplify the object to send to AI (avoid sending unnecessary internal IDs if possible)
         var simpleProfile = new
         {
-            profile.FirstName,
-            profile.LastName,
+            profile.FullName,
+            profile.Email,
+            profile.PhoneNumber,
             profile.Major,
             profile.GPA,
             profile.University,

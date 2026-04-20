@@ -80,7 +80,12 @@ public class AuthService : IAuthService
             var profile = new Profile
             {
                 UserId = user.Id,
-                CreatedAt = DateTime.UtcNow
+                Title = "Default CV",
+                TargetPosition = null,
+                IsDefault = true,
+                FullName = user.FullName,
+                Email = user.Email,
+                PhoneNumber = dto.PhoneNumber
             };
             await _unitOfWork.Profiles.AddAsync(profile, cancellationToken);
         }

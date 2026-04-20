@@ -1,0 +1,16 @@
+D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.Application\bin\Debug\net10.0\PTJ.Application.deps.json
+D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.Application\bin\Debug\net10.0\PTJ.Application.dll
+D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.Application\bin\Debug\net10.0\PTJ.Application.pdb
+D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.Application\bin\Debug\net10.0\PTJ.Domain.dll
+D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.Application\bin\Debug\net10.0\PTJ.Domain.pdb
+D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.Application\obj\Debug\net10.0\PTJ.Application.csproj.AssemblyReference.cache
+D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.Application\obj\Debug\net10.0\PTJ.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.Application\obj\Debug\net10.0\PTJ.Application.AssemblyInfoInputs.cache
+D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.Application\obj\Debug\net10.0\PTJ.Application.AssemblyInfo.cs
+D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.Application\obj\Debug\net10.0\PTJ.Application.csproj.CoreCompileInputs.cache
+D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.Application\obj\Debug\net10.0\PTJ.Application.sourcelink.json
+D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.Application\obj\Debug\net10.0\PTJ.Appl.554EA043.Up2Date
+D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.Application\obj\Debug\net10.0\PTJ.Application.dll
+D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.Application\obj\Debug\net10.0\refint\PTJ.Application.dll
+D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.Application\obj\Debug\net10.0\PTJ.Application.pdb
+D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.Application\obj\Debug\net10.0\ref\PTJ.Application.dll

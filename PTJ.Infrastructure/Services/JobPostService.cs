@@ -92,6 +92,11 @@ public class JobPostService : IJobPostService
             return Result<JobPostDto>.FailureResult("You must have a company to create job posts");
         }
 
+        if (!company.IsVerified)
+        {
+            return Result<JobPostDto>.FailureResult("Your company account is pending Admin approval. You cannot post jobs yet.");
+        }
+
         var jobPost = new JobPost
         {
             CompanyId = company.Id,
@@ -170,6 +175,19 @@ public class JobPostService : IJobPostService
             if (userCompany == null || userCompany.Id != jobPost.CompanyId)
             {
                 return Result<JobPostDto>.FailureResult("You don't have permission to update this job post");
+            }
+            if (!userCompany.IsVerified)
+            {
+                return Result<JobPostDto>.FailureResult("Your company account is currently not verified.");
+            }
+        }
+        else
+        {
+            // If they are the creator, let's still make sure their company is verified
+            var userCompany = await _unitOfWork.Companies.FirstOrDefaultAsync(c => c.OwnerId == userId, cancellationToken);
+            if (userCompany != null && !userCompany.IsVerified)
+            {
+                return Result<JobPostDto>.FailureResult("Your company account is currently not verified.");
             }
         }
 

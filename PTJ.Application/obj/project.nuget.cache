@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "dgSpecHash": "tc+Iy+kOBGM=",
+  "success": true,
+  "projectFilePath": "C:\\My_file\\Code\\C_sharp\\Backend_PartTimeJobs\\PTJ.Application\\PTJ.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\IlSMai\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\IlSMai\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.17\\microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512",
+    "C:\\Users\\IlSMai\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.1\\microsoft.extensions.primitives.5.0.1.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'AutoMapper' 12.0.1 has a known high severity vulnerability, https://github.com/advisories/GHSA-rvv3-g6hj-g44x",
+      "projectPath": "C:\\My_file\\Code\\C_sharp\\Backend_PartTimeJobs\\PTJ.Application\\PTJ.Application.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\My_file\\Code\\C_sharp\\Backend_PartTimeJobs\\PTJ.Application\\PTJ.Application.csproj",
+      "libraryId": "AutoMapper",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
+}

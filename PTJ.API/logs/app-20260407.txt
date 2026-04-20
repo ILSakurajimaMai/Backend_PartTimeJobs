@@ -1,0 +1,25 @@
+2026-04-07 08:03:55.999 +07:00 [INF] User profile is available. Using 'C:\Users\Duong Son\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-07 08:03:56.087 +07:00 [WRN] The WebRootPath was not found: D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.API\wwwroot. Static files may be unavailable.
+2026-04-07 08:03:56.114 +07:00 [INF] Now listening on: http://localhost:5000
+2026-04-07 08:03:56.116 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-07 08:03:56.117 +07:00 [INF] Hosting environment: Development
+2026-04-07 08:03:56.117 +07:00 [INF] Content root path: D:\Flutter\app_jobfind\Backend_PartTimeJobs\PTJ.API
+2026-04-07 08:04:17.951 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/ - null null
+2026-04-07 08:04:18.257 +07:00 [WRN] Failed to determine the https port for redirect.
+2026-04-07 08:04:20.756 +07:00 [INF] Executed DbCommand (70ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (DbType = Int64), @p2='?' (Size = 10), @p3='?' (Size = 45), @p4='?' (Size = 500), @p5='?' (Size = 1000), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (Size = 500), @p9='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [logging].[UserActivityLogs] ([AdditionalData], [DurationMs], [HttpMethod], [IpAddress], [Path], [QueryString], [StatusCode], [Timestamp], [UserAgent], [UserId])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+2026-04-07 08:04:20.841 +07:00 [INF] HTTP GET / responded 404 in 51ms | User: Anonymous | IP: ::1
+2026-04-07 08:04:20.856 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/ - 404 0 null 2909.4996ms
+2026-04-07 08:04:20.857 +07:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5000/, Response status code: 404
+2026-04-07 08:04:26.382 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/swagger - null null
+2026-04-07 08:04:26.387 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/swagger - 301 0 null 4.3354ms
+2026-04-07 08:04:26.395 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/swagger/index.html - null null
+2026-04-07 08:04:26.508 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/swagger/index.html - 200 null text/html;charset=utf-8 112.9351ms
+2026-04-07 08:04:26.530 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/swagger/index.js - null null
+2026-04-07 08:04:26.534 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/swagger/index.js - 200 null application/javascript;charset=utf-8 1.5371ms
+2026-04-07 08:04:26.600 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/swagger/v1/swagger.json - null null
+2026-04-07 08:04:26.844 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 244.5121ms

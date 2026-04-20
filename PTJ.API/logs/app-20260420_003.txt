@@ -1,0 +1,377 @@
+2026-04-20 16:46:45.599 +07:00 [WRN] The WebRootPath was not found: C:\My_file\Code\C_sharp\Backend_PartTimeJobs\PTJ.API\wwwroot. Static files may be unavailable.
+2026-04-20 16:48:06.540 +07:00 [WRN] Failed to determine the https port for redirect.
+2026-04-20 16:48:10.018 +07:00 [INF] Executed DbCommand (63ms) [Parameters=[@__dto_Email_0='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AvatarUrl], [u].[CreatedAt], [u].[CreatedBy], [u].[DeletedAt], [u].[DeletedBy], [u].[Email], [u].[FullName], [u].[IsActive], [u].[IsDeleted], [u].[IsEmailVerified], [u].[LastLoginAt], [u].[PasswordHash], [u].[PhoneNumber], [u].[RowVersion], [u].[UpdatedAt], [u].[UpdatedBy]
+FROM [auth].[Users] AS [u]
+WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Email] = @__dto_Email_0
+2026-04-20 16:48:10.102 +07:00 [INF] Executed DbCommand (11ms) [Parameters=[@__upperRole_0='?' (Size = 50)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[CreatedAt], [r].[Description], [r].[IsDeleted], [r].[Name], [r].[RowVersion], [r].[UpdatedAt]
+FROM [auth].[Roles] AS [r]
+WHERE [r].[IsDeleted] = CAST(0 AS bit) AND [r].[Name] = @__upperRole_0
+2026-04-20 16:48:10.745 +07:00 [INF] Executed DbCommand (13ms) [Parameters=[@p0='?' (Size = 500), @p1='?' (DbType = DateTime2), @p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32), @p5='?' (Size = 255), @p6='?' (Size = 255), @p7='?' (DbType = Boolean), @p8='?' (DbType = Boolean), @p9='?' (DbType = Boolean), @p10='?' (DbType = DateTime2), @p11='?' (Size = 500), @p12='?' (Size = 20), @p13='?' (DbType = DateTime2), @p14='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [auth].[Users] ([AvatarUrl], [CreatedAt], [CreatedBy], [DeletedAt], [DeletedBy], [Email], [FullName], [IsActive], [IsDeleted], [IsEmailVerified], [LastLoginAt], [PasswordHash], [PhoneNumber], [UpdatedAt], [UpdatedBy])
+OUTPUT INSERTED.[Id], INSERTED.[RowVersion]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14);
+2026-04-20 16:48:10.956 +07:00 [INF] Executed DbCommand (23ms) [Parameters=[@p0='?' (Size = 500), @p1='?' (Size = 2000), @p2='?' (DbType = DateTime2), @p3='?' (DbType = Int32), @p4='?' (DbType = DateTime2), @p5='?' (DbType = DateTime2), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (Size = 100), @p9='?' (Precision = 3) (Scale = 2) (DbType = Decimal), @p10='?' (DbType = Int32), @p11='?' (Size = 255), @p12='?' (DbType = Boolean), @p13='?' (Size = 100), @p14='?' (Size = 255), @p15='?' (Size = 255), @p16='?' (Size = 20), @p17='?' (Size = 500), @p18='?' (Size = 50), @p19='?' (Size = 255), @p20='?' (DbType = DateTime2), @p21='?' (DbType = Int32), @p22='?' (DbType = Int32), @p23='?' (DbType = Int32), @p24='?' (DbType = Int32), @p25='?' (DbType = Int32), @p26='?' (DbType = DateTime2), @p27='?' (DbType = DateTime2), @p28='?' (DbType = Int32), @p29='?' (DbType = Boolean), @p30='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [seeker].[Profiles] ([Address], [Bio], [CreatedAt], [CreatedBy], [DateOfBirth], [DeletedAt], [DeletedBy], [ExpectedGraduationDate], [FirstName], [GPA], [Gender], [GitHubUrl], [IsDeleted], [LastName], [LinkedInUrl], [Major], [PhoneNumber], [ResumeUrl], [StudentId], [University], [UpdatedAt], [UpdatedBy], [UserId], [YearOfStudy])
+OUTPUT INSERTED.[Id], INSERTED.[RowVersion]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23);
+INSERT INTO [auth].[UserRoles] ([RoleId], [UserId], [AssignedAt], [CreatedAt], [Id], [IsDeleted], [UpdatedAt])
+OUTPUT INSERTED.[RowVersion]
+VALUES (@p24, @p25, @p26, @p27, @p28, @p29, @p30);
+2026-04-20 16:48:11.056 +07:00 [INF] Executed DbCommand (11ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (DbType = Int64), @p2='?' (Size = 10), @p3='?' (Size = 45), @p4='?' (Size = 500), @p5='?' (Size = 1000), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (Size = 500), @p9='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [logging].[UserActivityLogs] ([AdditionalData], [DurationMs], [HttpMethod], [IpAddress], [Path], [QueryString], [StatusCode], [Timestamp], [UserAgent], [UserId])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+2026-04-20 16:48:11.104 +07:00 [INF] Executed DbCommand (2ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (DbType = Int64), @p2='?' (Size = 10), @p3='?' (Size = 45), @p4='?' (Size = 500), @p5='?' (Size = 1000), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (Size = 500), @p9='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [logging].[UserActivityLogs] ([AdditionalData], [DurationMs], [HttpMethod], [IpAddress], [Path], [QueryString], [StatusCode], [Timestamp], [UserAgent], [UserId])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+2026-04-20 16:48:11.120 +07:00 [INF] HTTP POST /api/Auth/register responded 200 in 4557ms | User: Anonymous | IP: ::1
+2026-04-20 16:48:34.432 +07:00 [INF] Executed DbCommand (10ms) [Parameters=[@__dto_Email_0='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AvatarUrl], [u].[CreatedAt], [u].[CreatedBy], [u].[DeletedAt], [u].[DeletedBy], [u].[Email], [u].[FullName], [u].[IsActive], [u].[IsDeleted], [u].[IsEmailVerified], [u].[LastLoginAt], [u].[PasswordHash], [u].[PhoneNumber], [u].[RowVersion], [u].[UpdatedAt], [u].[UpdatedBy]
+FROM [auth].[Users] AS [u]
+WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Email] = @__dto_Email_0
+2026-04-20 16:48:34.751 +07:00 [INF] Executed DbCommand (3ms) [Parameters=[@__user_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u].[UserId], [u].[RoleId], [u].[AssignedAt], [u].[CreatedAt], [u].[Id], [u].[IsDeleted], [u].[RowVersion], [u].[UpdatedAt]
+FROM [auth].[UserRoles] AS [u]
+WHERE [u].[UserId] = @__user_Id_0
+2026-04-20 16:48:34.839 +07:00 [INF] Executed DbCommand (10ms) [Parameters=[@__roleIds_0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT [r].[Id], [r].[CreatedAt], [r].[Description], [r].[IsDeleted], [r].[Name], [r].[RowVersion], [r].[UpdatedAt]
+FROM [auth].[Roles] AS [r]
+WHERE [r].[IsDeleted] = CAST(0 AS bit) AND [r].[Id] IN (
+    SELECT [r0].[value]
+    FROM OPENJSON(@__roleIds_0) WITH ([value] int '$') AS [r0]
+)
+2026-04-20 16:48:34.964 +07:00 [ERR] Failed executing DbCommand (11ms) [Parameters=[@p0='?' (DbType = DateTime2), @p1='?' (Size = 50), @p2='?' (DbType = DateTime2), @p3='?' (DbType = Boolean), @p4='?' (DbType = Boolean), @p5='?' (Size = 500), @p6='?' (DbType = DateTime2), @p7='?' (Size = 50), @p8='?' (Size = 500), @p9='?' (DbType = DateTime2), @p10='?' (DbType = Int32), @p26='?' (DbType = Int32), @p11='?' (Size = 500), @p12='?' (DbType = DateTime2), @p13='?' (DbType = Int32), @p14='?' (DbType = DateTime2), @p15='?' (DbType = Int32), @p16='?' (Size = 255), @p17='?' (Size = 255), @p18='?' (DbType = Boolean), @p19='?' (DbType = Boolean), @p20='?' (DbType = Boolean), @p21='?' (DbType = DateTime2), @p22='?' (Size = 500), @p23='?' (Size = 20), @p27='?' (Size = 8) (DbType = Binary), @p24='?' (DbType = DateTime2), @p25='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [auth].[RefreshTokens] ([CreatedAt], [CreatedByIp], [ExpiresAt], [IsDeleted], [IsRevoked], [ReplacedByToken], [RevokedAt], [RevokedByIp], [Token], [UpdatedAt], [UserId])
+OUTPUT INSERTED.[Id], INSERTED.[RowVersion]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10);
+UPDATE [auth].[Users] SET [AvatarUrl] = @p11, [CreatedAt] = @p12, [CreatedBy] = @p13, [DeletedAt] = @p14, [DeletedBy] = @p15, [Email] = @p16, [FullName] = @p17, [IsActive] = @p18, [IsDeleted] = @p19, [IsEmailVerified] = @p20, [LastLoginAt] = @p21, [PasswordHash] = @p22, [PhoneNumber] = @p23, [UpdatedAt] = @p24, [UpdatedBy] = @p25
+OUTPUT INSERTED.[RowVersion]
+WHERE [Id] = @p26 AND [RowVersion] = @p27;
+2026-04-20 16:48:34.996 +07:00 [ERR] An exception occurred in the database while saving changes for context type 'PTJ.Infrastructure.Persistence.AppDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: Could not save changes because the target table has database triggers. Please configure your table accordingly, see https://aka.ms/efcore-docs-sqlserver-save-changes-and-output-clause for more information.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The target table 'auth.Users' of the DML statement cannot have any enabled triggers if the statement contains an OUTPUT clause without INTO clause.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__195_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:8421ea23-03ed-4217-9577-67bf65c93e4e
+Error Number:334,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: Could not save changes because the target table has database triggers. Please configure your table accordingly, see https://aka.ms/efcore-docs-sqlserver-save-changes-and-output-clause for more information.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The target table 'auth.Users' of the DML statement cannot have any enabled triggers if the statement contains an OUTPUT clause without INTO clause.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__195_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:8421ea23-03ed-4217-9577-67bf65c93e4e
+Error Number:334,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-04-20 16:48:35.031 +07:00 [ERR] Failed executing DbCommand (5ms) [Parameters=[@p0='?' (DbType = DateTime2), @p1='?' (Size = 50), @p2='?' (DbType = DateTime2), @p3='?' (DbType = Boolean), @p4='?' (DbType = Boolean), @p5='?' (Size = 500), @p6='?' (DbType = DateTime2), @p7='?' (Size = 50), @p8='?' (Size = 500), @p9='?' (DbType = DateTime2), @p10='?' (DbType = Int32), @p11='?' (Size = 4000), @p12='?' (DbType = Int64), @p13='?' (Size = 10), @p14='?' (Size = 45), @p15='?' (Size = 500), @p16='?' (Size = 1000), @p17='?' (DbType = Int32), @p18='?' (DbType = DateTime2), @p19='?' (Size = 500), @p20='?' (DbType = Int32), @p36='?' (DbType = Int32), @p21='?' (Size = 500), @p22='?' (DbType = DateTime2), @p23='?' (DbType = Int32), @p24='?' (DbType = DateTime2), @p25='?' (DbType = Int32), @p26='?' (Size = 255), @p27='?' (Size = 255), @p28='?' (DbType = Boolean), @p29='?' (DbType = Boolean), @p30='?' (DbType = Boolean), @p31='?' (DbType = DateTime2), @p32='?' (Size = 500), @p33='?' (Size = 20), @p37='?' (Size = 8) (DbType = Binary), @p34='?' (DbType = DateTime2), @p35='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [auth].[RefreshTokens] ([CreatedAt], [CreatedByIp], [ExpiresAt], [IsDeleted], [IsRevoked], [ReplacedByToken], [RevokedAt], [RevokedByIp], [Token], [UpdatedAt], [UserId])
+OUTPUT INSERTED.[Id], INSERTED.[RowVersion]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10);
+INSERT INTO [logging].[UserActivityLogs] ([AdditionalData], [DurationMs], [HttpMethod], [IpAddress], [Path], [QueryString], [StatusCode], [Timestamp], [UserAgent], [UserId])
+OUTPUT INSERTED.[Id]
+VALUES (@p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20);
+UPDATE [auth].[Users] SET [AvatarUrl] = @p21, [CreatedAt] = @p22, [CreatedBy] = @p23, [DeletedAt] = @p24, [DeletedBy] = @p25, [Email] = @p26, [FullName] = @p27, [IsActive] = @p28, [IsDeleted] = @p29, [IsEmailVerified] = @p30, [LastLoginAt] = @p31, [PasswordHash] = @p32, [PhoneNumber] = @p33, [UpdatedAt] = @p34, [UpdatedBy] = @p35
+OUTPUT INSERTED.[RowVersion]
+WHERE [Id] = @p36 AND [RowVersion] = @p37;
+2026-04-20 16:48:35.045 +07:00 [ERR] An exception occurred in the database while saving changes for context type 'PTJ.Infrastructure.Persistence.AppDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: Could not save changes because the target table has database triggers. Please configure your table accordingly, see https://aka.ms/efcore-docs-sqlserver-save-changes-and-output-clause for more information.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The target table 'auth.Users' of the DML statement cannot have any enabled triggers if the statement contains an OUTPUT clause without INTO clause.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__195_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:8421ea23-03ed-4217-9577-67bf65c93e4e
+Error Number:334,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: Could not save changes because the target table has database triggers. Please configure your table accordingly, see https://aka.ms/efcore-docs-sqlserver-save-changes-and-output-clause for more information.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The target table 'auth.Users' of the DML statement cannot have any enabled triggers if the statement contains an OUTPUT clause without INTO clause.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__195_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:8421ea23-03ed-4217-9577-67bf65c93e4e
+Error Number:334,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-04-20 16:48:35.073 +07:00 [INF] HTTP POST /api/Auth/login responded 200 in 679ms | User: Anonymous | IP: ::1
+2026-04-20 16:48:35.081 +07:00 [ERR] An unhandled exception occurred
+Microsoft.EntityFrameworkCore.DbUpdateException: Could not save changes because the target table has database triggers. Please configure your table accordingly, see https://aka.ms/efcore-docs-sqlserver-save-changes-and-output-clause for more information.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The target table 'auth.Users' of the DML statement cannot have any enabled triggers if the statement contains an OUTPUT clause without INTO clause.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__195_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:8421ea23-03ed-4217-9577-67bf65c93e4e
+Error Number:334,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at PTJ.Infrastructure.Repositories.UnitOfWork.SaveChangesAsync(CancellationToken cancellationToken) in C:\My_file\Code\C_sharp\Backend_PartTimeJobs\PTJ.Infrastructure\Repositories\UnitOfWork.cs:line 88
+   at PTJ.Infrastructure.Services.AuthService.LoginAsync(LoginDto dto, String ipAddress, CancellationToken cancellationToken) in C:\My_file\Code\C_sharp\Backend_PartTimeJobs\PTJ.Infrastructure\Services\AuthService.cs:line 171
+   at PTJ.API.Controllers.AuthController.Login(LoginDto dto, CancellationToken cancellationToken) in C:\My_file\Code\C_sharp\Backend_PartTimeJobs\PTJ.API\Controllers\AuthController.cs:line 59
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at PTJ.API.Middleware.RequestLoggingMiddleware.InvokeAsync(HttpContext context, IActivityLogService activityLogService) in C:\My_file\Code\C_sharp\Backend_PartTimeJobs\PTJ.API\Middleware\RequestLoggingMiddleware.cs:line 50
+   at PTJ.API.Middleware.RequestLoggingMiddleware.InvokeAsync(HttpContext context, IActivityLogService activityLogService) in C:\My_file\Code\C_sharp\Backend_PartTimeJobs\PTJ.API\Middleware\RequestLoggingMiddleware.cs:line 97
+   at PTJ.API.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context, IErrorLogService errorLogService) in C:\My_file\Code\C_sharp\Backend_PartTimeJobs\PTJ.API\Middleware\GlobalExceptionMiddleware.cs:line 48
+2026-04-20 16:48:35.171 +07:00 [ERR] Failed executing DbCommand (8ms) [Parameters=[@p0='?' (DbType = DateTime2), @p1='?' (Size = 50), @p2='?' (DbType = DateTime2), @p3='?' (DbType = Boolean), @p4='?' (DbType = Boolean), @p5='?' (Size = 500), @p6='?' (DbType = DateTime2), @p7='?' (Size = 50), @p8='?' (Size = 500), @p9='?' (DbType = DateTime2), @p10='?' (DbType = Int32), @p11='?' (Size = 4000), @p12='?' (Size = 500), @p13='?' (Size = 10), @p14='?' (Size = 4000), @p15='?' (Size = 45), @p16='?' (Size = 20), @p17='?' (Size = 2000), @p18='?' (Size = 1000), @p19='?' (Size = 500), @p20='?' (Size = 200), @p21='?' (Size = -1), @p22='?' (DbType = DateTime2), @p23='?' (Size = 500), @p24='?' (DbType = Int32), @p25='?' (Size = 4000), @p26='?' (DbType = Int64), @p27='?' (Size = 10), @p28='?' (Size = 45), @p29='?' (Size = 500), @p30='?' (Size = 1000), @p31='?' (DbType = Int32), @p32='?' (DbType = DateTime2), @p33='?' (Size = 500), @p34='?' (DbType = Int32), @p50='?' (DbType = Int32), @p35='?' (Size = 500), @p36='?' (DbType = DateTime2), @p37='?' (DbType = Int32), @p38='?' (DbType = DateTime2), @p39='?' (DbType = Int32), @p40='?' (Size = 255), @p41='?' (Size = 255), @p42='?' (DbType = Boolean), @p43='?' (DbType = Boolean), @p44='?' (DbType = Boolean), @p45='?' (DbType = DateTime2), @p46='?' (Size = 500), @p47='?' (Size = 20), @p51='?' (Size = 8) (DbType = Binary), @p48='?' (DbType = DateTime2), @p49='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [auth].[RefreshTokens] ([CreatedAt], [CreatedByIp], [ExpiresAt], [IsDeleted], [IsRevoked], [ReplacedByToken], [RevokedAt], [RevokedByIp], [Token], [UpdatedAt], [UserId])
+OUTPUT INSERTED.[Id], INSERTED.[RowVersion]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10);
+INSERT INTO [logging].[SystemErrorLogs] ([AdditionalData], [ExceptionType], [HttpMethod], [InnerException], [IpAddress], [Level], [Message], [QueryString], [RequestPath], [Source], [StackTrace], [Timestamp], [UserAgent], [UserId])
+OUTPUT INSERTED.[Id]
+VALUES (@p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24);
+INSERT INTO [logging].[UserActivityLogs] ([AdditionalData], [DurationMs], [HttpMethod], [IpAddress], [Path], [QueryString], [StatusCode], [Timestamp], [UserAgent], [UserId])
+OUTPUT INSERTED.[Id]
+VALUES (@p25, @p26, @p27, @p28, @p29, @p30, @p31, @p32, @p33, @p34);
+UPDATE [auth].[Users] SET [AvatarUrl] = @p35, [CreatedAt] = @p36, [CreatedBy] = @p37, [DeletedAt] = @p38, [DeletedBy] = @p39, [Email] = @p40, [FullName] = @p41, [IsActive] = @p42, [IsDeleted] = @p43, [IsEmailVerified] = @p44, [LastLoginAt] = @p45, [PasswordHash] = @p46, [PhoneNumber] = @p47, [UpdatedAt] = @p48, [UpdatedBy] = @p49
+OUTPUT INSERTED.[RowVersion]
+WHERE [Id] = @p50 AND [RowVersion] = @p51;
+2026-04-20 16:48:35.185 +07:00 [ERR] An exception occurred in the database while saving changes for context type 'PTJ.Infrastructure.Persistence.AppDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: Could not save changes because the target table has database triggers. Please configure your table accordingly, see https://aka.ms/efcore-docs-sqlserver-save-changes-and-output-clause for more information.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The target table 'auth.Users' of the DML statement cannot have any enabled triggers if the statement contains an OUTPUT clause without INTO clause.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__195_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:8421ea23-03ed-4217-9577-67bf65c93e4e
+Error Number:334,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: Could not save changes because the target table has database triggers. Please configure your table accordingly, see https://aka.ms/efcore-docs-sqlserver-save-changes-and-output-clause for more information.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The target table 'auth.Users' of the DML statement cannot have any enabled triggers if the statement contains an OUTPUT clause without INTO clause.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__195_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:8421ea23-03ed-4217-9577-67bf65c93e4e
+Error Number:334,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+[2026-04-20 16:50:55.793 +07:00] [WRN] The WebRootPath was not found: C:\My_file\Code\C_sharp\Backend_PartTimeJobs\PTJ.API\wwwroot. Static files may be unavailable. {"EventId":{"Id":16,"Name":"WebRootPathNotFound"},"SourceContext":"Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}
+[2026-04-20 16:51:39.167 +07:00] [WRN] Failed to determine the https port for redirect. {"EventId":{"Id":3,"Name":"FailedToDeterminePort"},"SourceContext":"Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware","RequestId":"0HNKUO9LGTNFM:00000001","RequestPath":"/api/Auth/login","ConnectionId":"0HNKUO9LGTNFM","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}
+[2026-04-20 16:51:40.681 +07:00] [INF] Executed DbCommand (44ms) [Parameters=[@__dto_Email_0='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AvatarUrl], [u].[CreatedAt], [u].[CreatedBy], [u].[DeletedAt], [u].[DeletedBy], [u].[Email], [u].[FullName], [u].[IsActive], [u].[IsDeleted], [u].[IsEmailVerified], [u].[LastLoginAt], [u].[PasswordHash], [u].[PhoneNumber], [u].[RowVersion], [u].[UpdatedAt], [u].[UpdatedBy]
+FROM [auth].[Users] AS [u]
+WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Email] = @__dto_Email_0 {"EventId":{"Id":20101,"Name":"Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted"},"SourceContext":"Microsoft.EntityFrameworkCore.Database.Command","ActionId":"b5beaa3a-81b3-4427-ade2-c591788e50f9","ActionName":"PTJ.API.Controllers.AuthController.Login (PTJ.API)","RequestId":"0HNKUO9LGTNFM:00000001","RequestPath":"/api/Auth/login","ConnectionId":"0HNKUO9LGTNFM","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}
+[2026-04-20 16:51:41.146 +07:00] [INF] Executed DbCommand (11ms) [Parameters=[@__user_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u].[UserId], [u].[RoleId], [u].[AssignedAt], [u].[CreatedAt], [u].[Id], [u].[IsDeleted], [u].[RowVersion], [u].[UpdatedAt]
+FROM [auth].[UserRoles] AS [u]
+WHERE [u].[UserId] = @__user_Id_0 {"EventId":{"Id":20101,"Name":"Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted"},"SourceContext":"Microsoft.EntityFrameworkCore.Database.Command","ActionId":"b5beaa3a-81b3-4427-ade2-c591788e50f9","ActionName":"PTJ.API.Controllers.AuthController.Login (PTJ.API)","RequestId":"0HNKUO9LGTNFM:00000001","RequestPath":"/api/Auth/login","ConnectionId":"0HNKUO9LGTNFM","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}
+[2026-04-20 16:51:41.277 +07:00] [INF] Executed DbCommand (6ms) [Parameters=[@__roleIds_0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT [r].[Id], [r].[CreatedAt], [r].[Description], [r].[IsDeleted], [r].[Name], [r].[RowVersion], [r].[UpdatedAt]
+FROM [auth].[Roles] AS [r]
+WHERE [r].[IsDeleted] = CAST(0 AS bit) AND [r].[Id] IN (
+    SELECT [r0].[value]
+    FROM OPENJSON(@__roleIds_0) WITH ([value] int '$') AS [r0]
+) {"EventId":{"Id":20101,"Name":"Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted"},"SourceContext":"Microsoft.EntityFrameworkCore.Database.Command","ActionId":"b5beaa3a-81b3-4427-ade2-c591788e50f9","ActionName":"PTJ.API.Controllers.AuthController.Login (PTJ.API)","RequestId":"0HNKUO9LGTNFM:00000001","RequestPath":"/api/Auth/login","ConnectionId":"0HNKUO9LGTNFM","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}
+[2026-04-20 16:51:41.575 +07:00] [INF] Executed DbCommand (29ms) [Parameters=[@p0='?' (DbType = DateTime2), @p1='?' (Size = 50), @p2='?' (DbType = DateTime2), @p3='?' (DbType = Boolean), @p4='?' (DbType = Boolean), @p5='?' (Size = 500), @p6='?' (DbType = DateTime2), @p7='?' (Size = 50), @p8='?' (Size = 500), @p9='?' (DbType = DateTime2), @p10='?' (DbType = Int32), @p26='?' (DbType = Int32), @p11='?' (Size = 500), @p12='?' (DbType = DateTime2), @p13='?' (DbType = Int32), @p14='?' (DbType = DateTime2), @p15='?' (DbType = Int32), @p16='?' (Size = 255), @p17='?' (Size = 255), @p18='?' (DbType = Boolean), @p19='?' (DbType = Boolean), @p20='?' (DbType = Boolean), @p21='?' (DbType = DateTime2), @p22='?' (Size = 500), @p23='?' (Size = 20), @p27='?' (Size = 8) (DbType = Binary), @p24='?' (DbType = DateTime2), @p25='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [auth].[RefreshTokens] ([CreatedAt], [CreatedByIp], [ExpiresAt], [IsDeleted], [IsRevoked], [ReplacedByToken], [RevokedAt], [RevokedByIp], [Token], [UpdatedAt], [UserId])
+OUTPUT INSERTED.[Id], INSERTED.[RowVersion]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10);
+UPDATE [auth].[Users] SET [AvatarUrl] = @p11, [CreatedAt] = @p12, [CreatedBy] = @p13, [DeletedAt] = @p14, [DeletedBy] = @p15, [Email] = @p16, [FullName] = @p17, [IsActive] = @p18, [IsDeleted] = @p19, [IsEmailVerified] = @p20, [LastLoginAt] = @p21, [PasswordHash] = @p22, [PhoneNumber] = @p23, [UpdatedAt] = @p24, [UpdatedBy] = @p25
+WHERE [Id] = @p26 AND [RowVersion] = @p27;
+SELECT [RowVersion]
+FROM [auth].[Users]
+WHERE @@ROWCOUNT = 1 AND [Id] = @p26; {"EventId":{"Id":20101,"Name":"Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted"},"SourceContext":"Microsoft.EntityFrameworkCore.Database.Command","ActionId":"b5beaa3a-81b3-4427-ade2-c591788e50f9","ActionName":"PTJ.API.Controllers.AuthController.Login (PTJ.API)","RequestId":"0HNKUO9LGTNFM:00000001","RequestPath":"/api/Auth/login","ConnectionId":"0HNKUO9LGTNFM","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}
+[2026-04-20 16:51:41.673 +07:00] [INF] Executed DbCommand (4ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (DbType = Int64), @p2='?' (Size = 10), @p3='?' (Size = 45), @p4='?' (Size = 500), @p5='?' (Size = 1000), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (Size = 500), @p9='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [logging].[UserActivityLogs] ([AdditionalData], [DurationMs], [HttpMethod], [IpAddress], [Path], [QueryString], [StatusCode], [Timestamp], [UserAgent], [UserId])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9); {"EventId":{"Id":20101,"Name":"Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted"},"SourceContext":"Microsoft.EntityFrameworkCore.Database.Command","ActionId":"b5beaa3a-81b3-4427-ade2-c591788e50f9","ActionName":"PTJ.API.Controllers.AuthController.Login (PTJ.API)","RequestId":"0HNKUO9LGTNFM:00000001","RequestPath":"/api/Auth/login","ConnectionId":"0HNKUO9LGTNFM","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}
+[2026-04-20 16:51:41.720 +07:00] [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (DbType = Int64), @p2='?' (Size = 10), @p3='?' (Size = 45), @p4='?' (Size = 500), @p5='?' (Size = 1000), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (Size = 500), @p9='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [logging].[UserActivityLogs] ([AdditionalData], [DurationMs], [HttpMethod], [IpAddress], [Path], [QueryString], [StatusCode], [Timestamp], [UserAgent], [UserId])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9); {"EventId":{"Id":20101,"Name":"Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted"},"SourceContext":"Microsoft.EntityFrameworkCore.Database.Command","RequestId":"0HNKUO9LGTNFM:00000001","RequestPath":"/api/Auth/login","ConnectionId":"0HNKUO9LGTNFM","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}
+[2026-04-20 16:51:41.734 +07:00] [INF] HTTP POST /api/Auth/login responded 200 in 2548ms | User: Anonymous | IP: ::1 {"SourceContext":"PTJ.API.Middleware.RequestLoggingMiddleware","RequestId":"0HNKUO9LGTNFM:00000001","RequestPath":"/api/Auth/login","ConnectionId":"0HNKUO9LGTNFM","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}
+[2026-04-20 16:52:20.581 +07:00] [INF] Executed DbCommand (5ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [p].[Id], [p].[Address], [p].[Bio], [p].[CreatedAt], [p].[CreatedBy], [p].[DateOfBirth], [p].[DeletedAt], [p].[DeletedBy], [p].[ExpectedGraduationDate], [p].[FirstName], [p].[GPA], [p].[Gender], [p].[GitHubUrl], [p].[IsDeleted], [p].[LastName], [p].[LinkedInUrl], [p].[Major], [p].[PhoneNumber], [p].[ResumeUrl], [p].[RowVersion], [p].[StudentId], [p].[University], [p].[UpdatedAt], [p].[UpdatedBy], [p].[UserId], [p].[YearOfStudy]
+FROM [seeker].[Profiles] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[Id] = @__p_0 {"EventId":{"Id":20101,"Name":"Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted"},"SourceContext":"Microsoft.EntityFrameworkCore.Database.Command","ActionId":"b4628d4d-bafb-4e25-ab22-8419836fc708","ActionName":"PTJ.API.Controllers.ProfilesController.GetById (PTJ.API)","RequestId":"0HNKUO9LGTNFM:00000002","RequestPath":"/api/Profiles/4","ConnectionId":"0HNKUO9LGTNFM","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}
+[2026-04-20 16:52:20.680 +07:00] [INF] Executed DbCommand (5ms) [Parameters=[@__profile_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[CreatedAt], [p].[IsDeleted], [p].[ProficiencyLevel], [p].[ProfileId], [p].[RowVersion], [p].[SkillName], [p].[UpdatedAt], [p].[YearsOfExperience]
+FROM [seeker].[ProfileSkills] AS [p]
+WHERE [p].[ProfileId] = @__profile_Id_0 {"EventId":{"Id":20101,"Name":"Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted"},"SourceContext":"Microsoft.EntityFrameworkCore.Database.Command","ActionId":"b4628d4d-bafb-4e25-ab22-8419836fc708","ActionName":"PTJ.API.Controllers.ProfilesController.GetById (PTJ.API)","RequestId":"0HNKUO9LGTNFM:00000002","RequestPath":"/api/Profiles/4","ConnectionId":"0HNKUO9LGTNFM","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}
+[2026-04-20 16:52:20.705 +07:00] [INF] Executed DbCommand (3ms) [Parameters=[@__profile_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[CompanyName], [p].[CreatedAt], [p].[Description], [p].[EndDate], [p].[IsCurrentlyWorking], [p].[IsDeleted], [p].[Position], [p].[ProfileId], [p].[RowVersion], [p].[StartDate], [p].[UpdatedAt]
+FROM [seeker].[ProfileExperiences] AS [p]
+WHERE [p].[ProfileId] = @__profile_Id_0 {"EventId":{"Id":20101,"Name":"Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted"},"SourceContext":"Microsoft.EntityFrameworkCore.Database.Command","ActionId":"b4628d4d-bafb-4e25-ab22-8419836fc708","ActionName":"PTJ.API.Controllers.ProfilesController.GetById (PTJ.API)","RequestId":"0HNKUO9LGTNFM:00000002","RequestPath":"/api/Profiles/4","ConnectionId":"0HNKUO9LGTNFM","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}
+[2026-04-20 16:52:20.736 +07:00] [INF] Executed DbCommand (4ms) [Parameters=[@__profile_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[CreatedAt], [p].[Degree], [p].[Description], [p].[EndDate], [p].[FieldOfStudy], [p].[GPA], [p].[InstitutionName], [p].[IsDeleted], [p].[ProfileId], [p].[RowVersion], [p].[StartDate], [p].[UpdatedAt]
+FROM [seeker].[ProfileEducations] AS [p]
+WHERE [p].[ProfileId] = @__profile_Id_0 {"EventId":{"Id":20101,"Name":"Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted"},"SourceContext":"Microsoft.EntityFrameworkCore.Database.Command","ActionId":"b4628d4d-bafb-4e25-ab22-8419836fc708","ActionName":"PTJ.API.Controllers.ProfilesController.GetById (PTJ.API)","RequestId":"0HNKUO9LGTNFM:00000002","RequestPath":"/api/Profiles/4","ConnectionId":"0HNKUO9LGTNFM","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}
+[2026-04-20 16:52:20.763 +07:00] [INF] Executed DbCommand (4ms) [Parameters=[@__profile_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[CertificateFileUrl], [p].[CreatedAt], [p].[CredentialId], [p].[CredentialUrl], [p].[ExpiryDate], [p].[IsDeleted], [p].[IssueDate], [p].[IssuingOrganization], [p].[Name], [p].[ProfileId], [p].[RowVersion], [p].[UpdatedAt]
+FROM [seeker].[ProfileCertificates] AS [p]
+WHERE [p].[ProfileId] = @__profile_Id_0 {"EventId":{"Id":20101,"Name":"Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted"},"SourceContext":"Microsoft.EntityFrameworkCore.Database.Command","ActionId":"b4628d4d-bafb-4e25-ab22-8419836fc708","ActionName":"PTJ.API.Controllers.ProfilesController.GetById (PTJ.API)","RequestId":"0HNKUO9LGTNFM:00000002","RequestPath":"/api/Profiles/4","ConnectionId":"0HNKUO9LGTNFM","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}
+[2026-04-20 16:52:20.817 +07:00] [INF] Executed DbCommand (4ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (DbType = Int64), @p2='?' (Size = 10), @p3='?' (Size = 45), @p4='?' (Size = 500), @p5='?' (Size = 1000), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (Size = 500), @p9='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [logging].[UserActivityLogs] ([AdditionalData], [DurationMs], [HttpMethod], [IpAddress], [Path], [QueryString], [StatusCode], [Timestamp], [UserAgent], [UserId])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9); {"EventId":{"Id":20101,"Name":"Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted"},"SourceContext":"Microsoft.EntityFrameworkCore.Database.Command","ActionId":"b4628d4d-bafb-4e25-ab22-8419836fc708","ActionName":"PTJ.API.Controllers.ProfilesController.GetById (PTJ.API)","RequestId":"0HNKUO9LGTNFM:00000002","RequestPath":"/api/Profiles/4","ConnectionId":"0HNKUO9LGTNFM","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}
+[2026-04-20 16:52:20.866 +07:00] [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (DbType = Int64), @p2='?' (Size = 10), @p3='?' (Size = 45), @p4='?' (Size = 500), @p5='?' (Size = 1000), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (Size = 500), @p9='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [logging].[UserActivityLogs] ([AdditionalData], [DurationMs], [HttpMethod], [IpAddress], [Path], [QueryString], [StatusCode], [Timestamp], [UserAgent], [UserId])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9); {"EventId":{"Id":20101,"Name":"Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted"},"SourceContext":"Microsoft.EntityFrameworkCore.Database.Command","RequestId":"0HNKUO9LGTNFM:00000002","RequestPath":"/api/Profiles/4","ConnectionId":"0HNKUO9LGTNFM","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}
+[2026-04-20 16:52:20.880 +07:00] [INF] HTTP GET /api/Profiles/4 responded 200 in 425ms | User: 4 | IP: ::1 {"SourceContext":"PTJ.API.Middleware.RequestLoggingMiddleware","RequestId":"0HNKUO9LGTNFM:00000002","RequestPath":"/api/Profiles/4","ConnectionId":"0HNKUO9LGTNFM","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}

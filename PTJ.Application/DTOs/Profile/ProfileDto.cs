@@ -6,14 +6,15 @@ public class ProfileDto
 {
     public int Id { get; set; }
     public int UserId { get; set; }
-    public string? FirstName { get; set; }
-    public string? LastName { get; set; }
-    public string? FullName => $"{FirstName} {LastName}".Trim();
+    public string? Title { get; set; }
+    public string? TargetPosition { get; set; }
+    public bool IsDefault { get; set; }
+    public string? FullName { get; set; }
+    public string? Email { get; set; }
     public DateTime? DateOfBirth { get; set; }
     public Gender? Gender { get; set; }
     public string? Address { get; set; }
-    public string? City { get; set; }
-    public string? District { get; set; }
+    public string? PhoneNumber { get; set; }
     public string? StudentId { get; set; }
     public string? University { get; set; }
     public string? Major { get; set; }

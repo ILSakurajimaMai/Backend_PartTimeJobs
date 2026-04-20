@@ -1063,10 +1063,6 @@ namespace PTJ.Infrastructure.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<string>("City")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -1082,16 +1078,12 @@ namespace PTJ.Infrastructure.Migrations
                     b.Property<int?>("DeletedBy")
                         .HasColumnType("int");
 
-                    b.Property<string>("District")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<DateTime?>("ExpectedGraduationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FirstName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<string>("Email")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<decimal?>("GPA")
                         .HasPrecision(3, 2)
@@ -1104,14 +1096,29 @@ namespace PTJ.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("LastName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<string>("FullName")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("LinkedInUrl")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("TargetPosition")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Title")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -1152,9 +1159,11 @@ namespace PTJ.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserId", "IsDefault")
                         .IsUnique()
-                        .HasFilter("[IsDeleted] = 0");
+                        .HasFilter("[IsDeleted] = 0 AND [IsDefault] = 1");
 
                     b.ToTable("Profiles", "seeker");
                 });
@@ -2000,8 +2009,8 @@ namespace PTJ.Infrastructure.Migrations
             modelBuilder.Entity("PTJ.Domain.Entities.Profile", b =>
                 {
                     b.HasOne("PTJ.Domain.Entities.User", "User")
-                        .WithOne("Profile")
-                        .HasForeignKey("PTJ.Domain.Entities.Profile", "UserId")
+                        .WithMany("Profiles")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -2184,7 +2193,7 @@ namespace PTJ.Infrastructure.Migrations
                 {
                     b.Navigation("Company");
 
-                    b.Navigation("Profile");
+                    b.Navigation("Profiles");
 
                     b.Navigation("RefreshTokens");
 

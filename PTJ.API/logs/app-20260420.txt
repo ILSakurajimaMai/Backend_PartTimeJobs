@@ -1,0 +1,1 @@
+[2026-04-20 16:08:43.294 +07:00] [WRN] The WebRootPath was not found: C:\My_file\Code\C_sharp\Backend_PartTimeJobs\PTJ.API\wwwroot. Static files may be unavailable. {"EventId":{"Id":16,"Name":"WebRootPathNotFound"},"SourceContext":"Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware","MachineName":"DESKTOP-FHTC810","EnvironmentName":"Development"}

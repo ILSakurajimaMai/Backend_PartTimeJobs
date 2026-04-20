@@ -97,8 +97,7 @@ public class MappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.CompanyLogoUrl, opt => opt.MapFrom(src => src.JobPost != null && src.JobPost.Company != null ? src.JobPost.Company.LogoUrl : null))
             .ForMember(dest => dest.EmployerId, opt => opt.MapFrom(src => src.JobPost != null ? src.JobPost.CreatedByUserId : (int?)null))
             .ForMember(dest => dest.EmployerName, opt => opt.MapFrom(src => src.JobPost != null && src.JobPost.Creator != null ? src.JobPost.Creator.FullName : string.Empty))
-            .ForMember(dest => dest.ApplicantName, opt => opt.MapFrom(src =>
-                src.Profile != null ? $"{src.Profile.FirstName} {src.Profile.LastName}".Trim() : string.Empty))
+            .ForMember(dest => dest.ApplicantName, opt => opt.MapFrom(src => src.Profile != null ? src.Profile.FullName ?? string.Empty : string.Empty))
             .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => GetStatusName(src.StatusId)));
 
         CreateMap<CreateApplicationDto, PTJ.Domain.Entities.Application>()

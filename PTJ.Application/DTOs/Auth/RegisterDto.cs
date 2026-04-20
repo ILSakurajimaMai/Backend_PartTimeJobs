@@ -16,6 +16,10 @@ public class RegisterDto
     [Compare("Password", ErrorMessage = "Passwords do not match")]
     public string ConfirmPassword { get; set; } = string.Empty;
     
+    [Required(ErrorMessage = "Role is required")]
+    [RegularExpression("^(STUDENT|EMPLOYER)$", ErrorMessage = "Role must be STUDENT or EMPLOYER")]
+    public string Role { get; set; } = string.Empty;
+
     public string? FullName { get; set; }
     
     [Phone(ErrorMessage = "Invalid phone number format")]

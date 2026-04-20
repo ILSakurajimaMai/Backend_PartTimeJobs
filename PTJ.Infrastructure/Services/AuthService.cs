@@ -33,14 +33,20 @@ public class AuthService : IAuthService
             return Result<RegisterResponseDto>.FailureResult("Email already exists");
         }
 
-        // Get STUDENT role (default role for all new users)
-        var studentRole = await _unitOfWork.Roles.FirstOrDefaultAsync(
-            r => r.Name == "STUDENT",
+        // Get the requested role
+        var upperRole = dto.Role.ToUpper();
+        if (upperRole != "STUDENT" && upperRole != "EMPLOYER")
+        {
+            return Result<RegisterResponseDto>.FailureResult("Invalid role specified");
+        }
+
+        var selectedRole = await _unitOfWork.Roles.FirstOrDefaultAsync(
+            r => r.Name == upperRole,
             cancellationToken);
 
-        if (studentRole == null)
+        if (selectedRole == null)
         {
-            return Result<RegisterResponseDto>.FailureResult("STUDENT role not found in system");
+            return Result<RegisterResponseDto>.FailureResult($"{upperRole} role not found in system");
         }
 
         // Create user
@@ -58,23 +64,42 @@ public class AuthService : IAuthService
         await _unitOfWork.Users.AddAsync(user, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        // Assign STUDENT role
+        // Assign the selected role
         var userRole = new UserRole
         {
             UserId = user.Id,
-            RoleId = studentRole.Id,
+            RoleId = selectedRole.Id,
             AssignedAt = DateTime.UtcNow
         };
 
         await _unitOfWork.UserRoles.AddAsync(userRole, cancellationToken);
 
-        // Create Profile automatically
-        var profile = new Profile
+        // Create Profile or Company automatically based on role
+        if (upperRole == "STUDENT")
         {
-            UserId = user.Id,
-            CreatedAt = DateTime.UtcNow
-        };
-        await _unitOfWork.Profiles.AddAsync(profile, cancellationToken);
+            var profile = new Profile
+            {
+                UserId = user.Id,
+                Title = "Default CV",
+                TargetPosition = null,
+                IsDefault = true,
+                FullName = user.FullName,
+                Email = user.Email,
+                PhoneNumber = dto.PhoneNumber
+            };
+            await _unitOfWork.Profiles.AddAsync(profile, cancellationToken);
+        }
+        else if (upperRole == "EMPLOYER")
+        {
+            var company = new Company
+            {
+                OwnerId = user.Id,
+                Name = string.IsNullOrWhiteSpace(user.FullName) ? user.Email : user.FullName,
+                IsVerified = false,
+                CreatedAt = DateTime.UtcNow
+            };
+            await _unitOfWork.Companies.AddAsync(company, cancellationToken);
+        }
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -83,7 +108,7 @@ public class AuthService : IAuthService
             UserId = user.Id,
             Email = user.Email,
             FullName = user.FullName,
-            Role = studentRole.Name
+            Role = selectedRole.Name
         };
 
         return Result<RegisterResponseDto>.SuccessResult(response, "Registration successful. Please login to continue.");

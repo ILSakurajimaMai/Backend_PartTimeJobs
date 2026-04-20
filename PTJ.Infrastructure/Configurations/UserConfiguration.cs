@@ -36,9 +36,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasQueryFilter(u => !u.IsDeleted);
 
         // Relationships
-        builder.HasOne(u => u.Profile)
+        builder.HasMany(u => u.Profiles)
             .WithOne(p => p.User)
-            .HasForeignKey<Profile>(p => p.UserId)
+            .HasForeignKey(p => p.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(u => u.Company)

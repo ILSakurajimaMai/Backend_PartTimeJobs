@@ -1,0 +1,73 @@
+2026-04-20 17:08:19.578 +07:00 [WRN] The WebRootPath was not found: C:\My_file\Code\C_sharp\Backend_PartTimeJobs\PTJ.API\wwwroot. Static files may be unavailable.
+2026-04-20 17:08:48.889 +07:00 [WRN] Failed to determine the https port for redirect.
+2026-04-20 17:08:50.498 +07:00 [INF] Executed DbCommand (46ms) [Parameters=[@__dto_Email_0='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AvatarUrl], [u].[CreatedAt], [u].[CreatedBy], [u].[DeletedAt], [u].[DeletedBy], [u].[Email], [u].[FullName], [u].[IsActive], [u].[IsDeleted], [u].[IsEmailVerified], [u].[LastLoginAt], [u].[PasswordHash], [u].[PhoneNumber], [u].[RowVersion], [u].[UpdatedAt], [u].[UpdatedBy]
+FROM [auth].[Users] AS [u]
+WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Email] = @__dto_Email_0
+2026-04-20 17:08:50.971 +07:00 [INF] Executed DbCommand (5ms) [Parameters=[@__user_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u].[UserId], [u].[RoleId], [u].[AssignedAt], [u].[CreatedAt], [u].[Id], [u].[IsDeleted], [u].[RowVersion], [u].[UpdatedAt]
+FROM [auth].[UserRoles] AS [u]
+WHERE [u].[UserId] = @__user_Id_0
+2026-04-20 17:08:51.110 +07:00 [INF] Executed DbCommand (7ms) [Parameters=[@__roleIds_0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT [r].[Id], [r].[CreatedAt], [r].[Description], [r].[IsDeleted], [r].[Name], [r].[RowVersion], [r].[UpdatedAt]
+FROM [auth].[Roles] AS [r]
+WHERE [r].[IsDeleted] = CAST(0 AS bit) AND [r].[Id] IN (
+    SELECT [r0].[value]
+    FROM OPENJSON(@__roleIds_0) WITH ([value] int '$') AS [r0]
+)
+2026-04-20 17:08:51.416 +07:00 [INF] Executed DbCommand (24ms) [Parameters=[@p0='?' (DbType = DateTime2), @p1='?' (Size = 50), @p2='?' (DbType = DateTime2), @p3='?' (DbType = Boolean), @p4='?' (DbType = Boolean), @p5='?' (Size = 500), @p6='?' (DbType = DateTime2), @p7='?' (Size = 50), @p8='?' (Size = 500), @p9='?' (DbType = DateTime2), @p10='?' (DbType = Int32), @p26='?' (DbType = Int32), @p11='?' (Size = 500), @p12='?' (DbType = DateTime2), @p13='?' (DbType = Int32), @p14='?' (DbType = DateTime2), @p15='?' (DbType = Int32), @p16='?' (Size = 255), @p17='?' (Size = 255), @p18='?' (DbType = Boolean), @p19='?' (DbType = Boolean), @p20='?' (DbType = Boolean), @p21='?' (DbType = DateTime2), @p22='?' (Size = 500), @p23='?' (Size = 20), @p27='?' (Size = 8) (DbType = Binary), @p24='?' (DbType = DateTime2), @p25='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [auth].[RefreshTokens] ([CreatedAt], [CreatedByIp], [ExpiresAt], [IsDeleted], [IsRevoked], [ReplacedByToken], [RevokedAt], [RevokedByIp], [Token], [UpdatedAt], [UserId])
+OUTPUT INSERTED.[Id], INSERTED.[RowVersion]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10);
+UPDATE [auth].[Users] SET [AvatarUrl] = @p11, [CreatedAt] = @p12, [CreatedBy] = @p13, [DeletedAt] = @p14, [DeletedBy] = @p15, [Email] = @p16, [FullName] = @p17, [IsActive] = @p18, [IsDeleted] = @p19, [IsEmailVerified] = @p20, [LastLoginAt] = @p21, [PasswordHash] = @p22, [PhoneNumber] = @p23, [UpdatedAt] = @p24, [UpdatedBy] = @p25
+WHERE [Id] = @p26 AND [RowVersion] = @p27;
+SELECT [RowVersion]
+FROM [auth].[Users]
+WHERE @@ROWCOUNT = 1 AND [Id] = @p26;
+2026-04-20 17:08:51.523 +07:00 [INF] Executed DbCommand (4ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (DbType = Int64), @p2='?' (Size = 10), @p3='?' (Size = 45), @p4='?' (Size = 500), @p5='?' (Size = 1000), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (Size = 500), @p9='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [logging].[UserActivityLogs] ([AdditionalData], [DurationMs], [HttpMethod], [IpAddress], [Path], [QueryString], [StatusCode], [Timestamp], [UserAgent], [UserId])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+2026-04-20 17:08:51.582 +07:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (DbType = Int64), @p2='?' (Size = 10), @p3='?' (Size = 45), @p4='?' (Size = 500), @p5='?' (Size = 1000), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (Size = 500), @p9='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [logging].[UserActivityLogs] ([AdditionalData], [DurationMs], [HttpMethod], [IpAddress], [Path], [QueryString], [StatusCode], [Timestamp], [UserAgent], [UserId])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+2026-04-20 17:08:51.596 +07:00 [INF] HTTP POST /api/Auth/login responded 200 in 2688ms | User: Anonymous | IP: ::1
+2026-04-20 17:09:08.585 +07:00 [INF] Executed DbCommand (3ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [p].[Id], [p].[Address], [p].[Bio], [p].[CreatedAt], [p].[CreatedBy], [p].[DateOfBirth], [p].[DeletedAt], [p].[DeletedBy], [p].[Email], [p].[ExpectedGraduationDate], [p].[FullName], [p].[GPA], [p].[Gender], [p].[GitHubUrl], [p].[IsDeleted], [p].[LinkedInUrl], [p].[Major], [p].[PhoneNumber], [p].[ResumeUrl], [p].[RowVersion], [p].[StudentId], [p].[University], [p].[UpdatedAt], [p].[UpdatedBy], [p].[UserId], [p].[YearOfStudy]
+FROM [seeker].[Profiles] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[Id] = @__p_0
+2026-04-20 17:09:08.687 +07:00 [INF] Executed DbCommand (3ms) [Parameters=[@__profile_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[CreatedAt], [p].[IsDeleted], [p].[ProficiencyLevel], [p].[ProfileId], [p].[RowVersion], [p].[SkillName], [p].[UpdatedAt], [p].[YearsOfExperience]
+FROM [seeker].[ProfileSkills] AS [p]
+WHERE [p].[ProfileId] = @__profile_Id_0
+2026-04-20 17:09:08.712 +07:00 [INF] Executed DbCommand (3ms) [Parameters=[@__profile_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[CompanyName], [p].[CreatedAt], [p].[Description], [p].[EndDate], [p].[IsCurrentlyWorking], [p].[IsDeleted], [p].[Position], [p].[ProfileId], [p].[RowVersion], [p].[StartDate], [p].[UpdatedAt]
+FROM [seeker].[ProfileExperiences] AS [p]
+WHERE [p].[ProfileId] = @__profile_Id_0
+2026-04-20 17:09:08.744 +07:00 [INF] Executed DbCommand (3ms) [Parameters=[@__profile_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[CreatedAt], [p].[Degree], [p].[Description], [p].[EndDate], [p].[FieldOfStudy], [p].[GPA], [p].[InstitutionName], [p].[IsDeleted], [p].[ProfileId], [p].[RowVersion], [p].[StartDate], [p].[UpdatedAt]
+FROM [seeker].[ProfileEducations] AS [p]
+WHERE [p].[ProfileId] = @__profile_Id_0
+2026-04-20 17:09:08.775 +07:00 [INF] Executed DbCommand (3ms) [Parameters=[@__profile_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[CertificateFileUrl], [p].[CreatedAt], [p].[CredentialId], [p].[CredentialUrl], [p].[ExpiryDate], [p].[IsDeleted], [p].[IssueDate], [p].[IssuingOrganization], [p].[Name], [p].[ProfileId], [p].[RowVersion], [p].[UpdatedAt]
+FROM [seeker].[ProfileCertificates] AS [p]
+WHERE [p].[ProfileId] = @__profile_Id_0
+2026-04-20 17:09:08.817 +07:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (DbType = Int64), @p2='?' (Size = 10), @p3='?' (Size = 45), @p4='?' (Size = 500), @p5='?' (Size = 1000), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (Size = 500), @p9='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [logging].[UserActivityLogs] ([AdditionalData], [DurationMs], [HttpMethod], [IpAddress], [Path], [QueryString], [StatusCode], [Timestamp], [UserAgent], [UserId])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+2026-04-20 17:09:08.859 +07:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (DbType = Int64), @p2='?' (Size = 10), @p3='?' (Size = 45), @p4='?' (Size = 500), @p5='?' (Size = 1000), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (Size = 500), @p9='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [logging].[UserActivityLogs] ([AdditionalData], [DurationMs], [HttpMethod], [IpAddress], [Path], [QueryString], [StatusCode], [Timestamp], [UserAgent], [UserId])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+2026-04-20 17:09:08.870 +07:00 [INF] HTTP GET /api/Profiles/4 responded 200 in 404ms | User: 4 | IP: ::1

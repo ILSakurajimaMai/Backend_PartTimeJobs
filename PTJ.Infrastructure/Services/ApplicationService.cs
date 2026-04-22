@@ -54,7 +54,7 @@ public class ApplicationService : IApplicationService
         return Result<PaginatedList<ApplicationDto>>.SuccessResult(result);
     }
 
-    public async Task<Result<PaginatedList<ApplicationDto>>> GetByProfileIdAsync(int profileId, int pageNumber, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<Result<PaginatedList<ApplicationDto>>> GetByCVIdAsync(int profileId, int pageNumber, int pageSize, CancellationToken cancellationToken = default)
     {
         var query = _unitOfWork.Applications.GetQueryable()
             .Where(a => a.ProfileId == profileId);
@@ -76,7 +76,7 @@ public class ApplicationService : IApplicationService
     public async Task<Result<PaginatedList<ApplicationDto>>> GetByUserIdAsync(int userId, int pageNumber, int pageSize, CancellationToken cancellationToken = default)
     {
         var query = _unitOfWork.Applications.GetQueryable()
-            .Where(a => a.Profile.UserId == userId);
+            .Where(a => a.CV.UserId == userId);
 
         var totalCount = await query.CountAsync(cancellationToken);
 
@@ -100,35 +100,35 @@ public class ApplicationService : IApplicationService
             return Result<ApplicationDto>.FailureResult("Job post not found");
         }
 
-        PTJ.Domain.Entities.Profile? profile;
+        PTJ.Domain.Entities.CV? cv;
         if (dto.ProfileId.HasValue)
         {
-            profile = await _unitOfWork.Profiles.FirstOrDefaultAsync(
+            cv = await _unitOfWork.CVs.FirstOrDefaultAsync(
                 p => p.Id == dto.ProfileId.Value && p.UserId == userId,
                 cancellationToken);
         }
         else
         {
-            profile = await _unitOfWork.Profiles.FirstOrDefaultAsync(
+            cv = await _unitOfWork.CVs.FirstOrDefaultAsync(
                 p => p.UserId == userId && p.IsDefault,
                 cancellationToken);
 
-            if (profile == null)
+            if (cv == null)
             {
-                profile = await _unitOfWork.Profiles.FirstOrDefaultAsync(
+                cv = await _unitOfWork.CVs.FirstOrDefaultAsync(
                     p => p.UserId == userId,
                     cancellationToken);
             }
         }
 
-        if (profile == null)
+        if (cv == null)
         {
-            return Result<ApplicationDto>.FailureResult("Please select a valid profile before applying");
+            return Result<ApplicationDto>.FailureResult("Please select a valid CV before applying");
         }
 
         // Check if already applied
         var existingApplication = await _unitOfWork.Applications.FirstOrDefaultAsync(
-            a => a.JobPostId == dto.JobPostId && a.ProfileId == profile.Id,
+            a => a.JobPostId == dto.JobPostId && a.ProfileId == cv.Id,
             cancellationToken);
 
         if (existingApplication != null)
@@ -149,7 +149,7 @@ public class ApplicationService : IApplicationService
         var application = new Domain.Entities.Application
         {
             JobPostId = dto.JobPostId,
-            ProfileId = profile.Id,
+            ProfileId = cv.Id,
             StatusId = pendingStatus.Id,
             CoverLetter = dto.CoverLetter,
             ResumeUrl = dto.ResumeUrl,
@@ -237,8 +237,8 @@ public class ApplicationService : IApplicationService
         }
 
         // Check ownership
-        var profile = await _unitOfWork.Profiles.GetByIdAsync(application.ProfileId, cancellationToken);
-        if (profile == null || profile.UserId != userId)
+        var cv = await _unitOfWork.CVs.GetByIdAsync(application.ProfileId, cancellationToken);
+        if (cv == null || cv.UserId != userId)
         {
             return Result.FailureResult("You don't have permission to withdraw this application");
         }

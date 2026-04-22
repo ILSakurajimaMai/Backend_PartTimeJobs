@@ -80,6 +80,17 @@ public class AuthService : IAuthService
             var profile = new Profile
             {
                 UserId = user.Id,
+                FullName = user.FullName,
+                Email = user.Email,
+                PhoneNumber = dto.PhoneNumber
+            };
+            await _unitOfWork.Profiles.AddAsync(profile, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            var cv = new CV
+            {
+                UserId = user.Id,
+                ProfileId = profile.Id,
                 Title = "Default CV",
                 TargetPosition = null,
                 IsDefault = true,
@@ -87,7 +98,7 @@ public class AuthService : IAuthService
                 Email = user.Email,
                 PhoneNumber = dto.PhoneNumber
             };
-            await _unitOfWork.Profiles.AddAsync(profile, cancellationToken);
+            await _unitOfWork.CVs.AddAsync(cv, cancellationToken);
         }
         else if (upperRole == "EMPLOYER")
         {

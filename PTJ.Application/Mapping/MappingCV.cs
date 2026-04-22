@@ -3,29 +3,30 @@ using PTJ.Application.DTOs.Application;
 using PTJ.Application.DTOs.Auth;
 using PTJ.Application.DTOs.Company;
 using PTJ.Application.DTOs.JobPost;
+using PTJ.Application.DTOs.CV;
 using PTJ.Application.DTOs.Profile;
 using PTJ.Domain.Entities;
 
 namespace PTJ.Application.Mapping;
 
-/// <summary>
-/// AutoMapper configuration for mapping between entities and DTOs
-/// </summary>
-public class MappingProfile : AutoMapper.Profile
+public class MappingCV : AutoMapper.Profile
 {
-    public MappingProfile()
+    public MappingCV()
     {
         // Profile mappings
-        CreateMap<PTJ.Domain.Entities.Profile, ProfileDto>()
+        CreateMap<PTJ.Domain.Entities.Profile, ProfileDto>();
+
+        // CV mappings
+        CreateMap<CV, CVDto>()
             .ForMember(dest => dest.Skills, opt => opt.MapFrom(src => src.Skills))
             .ForMember(dest => dest.Experiences, opt => opt.MapFrom(src => src.Experiences))
             .ForMember(dest => dest.Educations, opt => opt.MapFrom(src => src.Educations))
             .ForMember(dest => dest.Certificates, opt => opt.MapFrom(src => src.Certificates));
 
-        CreateMap<ProfileSkill, ProfileSkillDto>();
-        CreateMap<ProfileExperience, ProfileExperienceDto>();
-        CreateMap<ProfileEducation, ProfileEducationDto>();
-        CreateMap<ProfileCertificate, ProfileCertificateDto>();
+        CreateMap<CVSkill, CVSkillDto>();
+        CreateMap<CVExperience, CVExperienceDto>();
+        CreateMap<CVEducation, CVEducationDto>();
+        CreateMap<CVCertificate, CVCertificateDto>();
 
         // Company mappings
         CreateMap<Company, CompanyDto>();
@@ -97,13 +98,13 @@ public class MappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.CompanyLogoUrl, opt => opt.MapFrom(src => src.JobPost != null && src.JobPost.Company != null ? src.JobPost.Company.LogoUrl : null))
             .ForMember(dest => dest.EmployerId, opt => opt.MapFrom(src => src.JobPost != null ? src.JobPost.CreatedByUserId : (int?)null))
             .ForMember(dest => dest.EmployerName, opt => opt.MapFrom(src => src.JobPost != null && src.JobPost.Creator != null ? src.JobPost.Creator.FullName : string.Empty))
-            .ForMember(dest => dest.ApplicantName, opt => opt.MapFrom(src => src.Profile != null ? src.Profile.FullName ?? string.Empty : string.Empty))
+            .ForMember(dest => dest.ApplicantName, opt => opt.MapFrom(src => src.CV != null ? src.CV.FullName ?? string.Empty : string.Empty))
             .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => GetStatusName(src.StatusId)));
 
         CreateMap<CreateApplicationDto, PTJ.Domain.Entities.Application>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.ProfileId, opt => opt.Ignore())
-            .ForMember(dest => dest.Profile, opt => opt.Ignore())
+            .ForMember(dest => dest.CV, opt => opt.Ignore())
             .ForMember(dest => dest.JobPost, opt => opt.Ignore())
             .ForMember(dest => dest.StatusId, opt => opt.Ignore())
             .ForMember(dest => dest.Status, opt => opt.Ignore())

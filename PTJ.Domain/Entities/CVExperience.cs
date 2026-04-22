@@ -2,7 +2,7 @@ using PTJ.Domain.Common;
 
 namespace PTJ.Domain.Entities;
 
-public class ProfileExperience : BaseEntity
+public class CVExperience : BaseEntity
 {
     public int ProfileId { get; set; }
     public string CompanyName { get; set; } = string.Empty;
@@ -13,5 +13,5 @@ public class ProfileExperience : BaseEntity
     public bool IsCurrentlyWorking { get; set; }
 
     // Navigation properties
-    public virtual Profile Profile { get; set; } = null!;
+    public virtual CV CV { get; set; } = null!;
 }

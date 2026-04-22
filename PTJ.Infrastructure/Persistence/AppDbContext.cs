@@ -32,12 +32,15 @@ public class AppDbContext : DbContext
     public DbSet<Company> Companies => Set<Company>();
     public DbSet<CompanyRegistrationRequest> CompanyRegistrationRequests => Set<CompanyRegistrationRequest>();
 
-    // Profiles
+    // Profiles (1-1 with User)
     public DbSet<Profile> Profiles => Set<Profile>();
-    public DbSet<ProfileSkill> ProfileSkills => Set<ProfileSkill>();
-    public DbSet<ProfileExperience> ProfileExperiences => Set<ProfileExperience>();
-    public DbSet<ProfileEducation> ProfileEducations => Set<ProfileEducation>();
-    public DbSet<ProfileCertificate> ProfileCertificates => Set<ProfileCertificate>();
+
+    // CVs
+    public DbSet<CV> CVs => Set<CV>();
+    public DbSet<CVSkill> CVSkills => Set<CVSkill>();
+    public DbSet<CVExperience> CVExperiences => Set<CVExperience>();
+    public DbSet<CVEducation> CVEducations => Set<CVEducation>();
+    public DbSet<CVCertificate> CVCertificates => Set<CVCertificate>();
 
     // Jobs
     public DbSet<JobPost> JobPosts => Set<JobPost>();

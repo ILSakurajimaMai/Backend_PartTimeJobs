@@ -36,10 +36,15 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasQueryFilter(u => !u.IsDeleted);
 
         // Relationships
-        builder.HasMany(u => u.Profiles)
+        builder.HasOne(u => u.Profile)
+            .WithOne(p => p.User)
+            .HasForeignKey<Profile>(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(u => u.CVs)
             .WithOne(p => p.User)
             .HasForeignKey(p => p.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(u => u.Company)
             .WithOne(c => c.Owner)

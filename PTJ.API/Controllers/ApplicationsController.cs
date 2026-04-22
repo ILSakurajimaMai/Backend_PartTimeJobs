@@ -13,13 +13,13 @@ namespace PTJ.API.Controllers;
 public class ApplicationsController : ControllerBase
 {
     private readonly IApplicationService _applicationService;
-    private readonly IProfileService _profileService;
+    private readonly ICVService _cvService;
     private readonly IActivityLogService _activityLogService;
 
-    public ApplicationsController(IApplicationService applicationService, IProfileService profileService, IActivityLogService activityLogService)
+    public ApplicationsController(IApplicationService applicationService, ICVService cvService, IActivityLogService activityLogService)
     {
         _applicationService = applicationService;
-        _profileService = profileService;
+        _cvService = cvService;
         _activityLogService = activityLogService;
     }
 
@@ -89,20 +89,20 @@ public class ApplicationsController : ControllerBase
     /// </summary>
     [Authorize(Roles = "STUDENT,ADMIN")]
     [HttpGet("me")]
-    public async Task<IActionResult> GetMyApplications([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int? profileId = null, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetMyApplications([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int? cvId = null, CancellationToken cancellationToken = default)
     {
         var userId = GetUserId();
         Result<PaginatedList<ApplicationDto>> result;
 
-        if (profileId.HasValue)
+        if (cvId.HasValue)
         {
-            var profileResult = await _profileService.GetByIdAsync(profileId.Value, cancellationToken);
-            if (!profileResult.Success || profileResult.Data == null || profileResult.Data.UserId != userId)
+            var cvResult = await _cvService.GetByIdAsync(cvId.Value, cancellationToken);
+            if (!cvResult.Success || cvResult.Data == null || cvResult.Data.UserId != userId)
             {
-                return BadRequest(new { Success = false, Message = "Profile not found" });
+                return BadRequest(new { Success = false, Message = "CV not found" });
             }
 
-            result = await _applicationService.GetByProfileIdAsync(profileId.Value, pageNumber, pageSize, cancellationToken);
+            result = await _applicationService.GetByCVIdAsync(cvId.Value, pageNumber, pageSize, cancellationToken);
         }
         else
         {
@@ -120,7 +120,7 @@ public class ApplicationsController : ControllerBase
             userId,
             "GET",
             "/api/applications/me",
-            $"pageNumber={pageNumber}&pageSize={pageSize}&profileId={profileId}",
+            $"pageNumber={pageNumber}&pageSize={pageSize}&cvId={cvId}",
             ipAddress,
             userAgent,
             200,

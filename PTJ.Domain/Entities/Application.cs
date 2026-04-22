@@ -16,7 +16,7 @@ public class Application : BaseAuditableEntity
 
     // Navigation properties
     public virtual JobPost JobPost { get; set; } = null!;
-    public virtual Profile Profile { get; set; } = null!;
+    public virtual CV CV { get; set; } = null!;
     public virtual ApplicationStatusLookup Status { get; set; } = null!;
     public virtual User? Reviewer { get; set; }
     public virtual ICollection<ApplicationHistory> History { get; set; } = new List<ApplicationHistory>();

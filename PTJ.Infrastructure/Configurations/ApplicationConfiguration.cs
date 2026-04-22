@@ -32,7 +32,7 @@ public class ApplicationConfiguration : IEntityTypeConfiguration<Domain.Entities
             .HasForeignKey(a => a.JobPostId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(a => a.Profile)
+        builder.HasOne(a => a.CV)
             .WithMany(p => p.Applications)
             .HasForeignKey(a => a.ProfileId)
             .OnDelete(DeleteBehavior.Cascade);

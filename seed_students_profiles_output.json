@@ -1,0 +1,272 @@
+[
+  {
+    "email": "student_seed_fa92a6ca_1_1_9002@example.com",
+    "password": "Seed123!",
+    "fullName": "Hoang Trang",
+    "phoneNumber": "0900000001",
+    "studentId": "SEFA92A6CA0001",
+    "cvs": [
+      {
+        "id": 1,
+        "title": "CV Backend Intern (1)",
+        "targetPosition": "Backend Intern",
+        "isDefault": true
+      },
+      {
+        "id": 2,
+        "title": "CV Frontend Intern (2)",
+        "targetPosition": "Frontend Intern",
+        "isDefault": false
+      },
+      {
+        "id": 3,
+        "title": "CV Fullstack Intern (3)",
+        "targetPosition": "Fullstack Intern",
+        "isDefault": false
+      }
+    ]
+  },
+  {
+    "email": "student_seed_fa92a6ca_2_1_5895@example.com",
+    "password": "Seed123!",
+    "fullName": "Dang Ngan",
+    "phoneNumber": "0900000002",
+    "studentId": "SEFA92A6CA0002",
+    "cvs": [
+      {
+        "id": 4,
+        "title": "CV Backend Intern (1)",
+        "targetPosition": "Backend Intern",
+        "isDefault": true
+      },
+      {
+        "id": 5,
+        "title": "CV Frontend Intern (2)",
+        "targetPosition": "Frontend Intern",
+        "isDefault": false
+      },
+      {
+        "id": 6,
+        "title": "CV Fullstack Intern (3)",
+        "targetPosition": "Fullstack Intern",
+        "isDefault": false
+      }
+    ]
+  },
+  {
+    "email": "student_seed_fa92a6ca_3_1_8674@example.com",
+    "password": "Seed123!",
+    "fullName": "Do An",
+    "phoneNumber": "0900000003",
+    "studentId": "SEFA92A6CA0003",
+    "cvs": [
+      {
+        "id": 7,
+        "title": "CV Backend Intern (1)",
+        "targetPosition": "Backend Intern",
+        "isDefault": true
+      },
+      {
+        "id": 8,
+        "title": "CV Frontend Intern (2)",
+        "targetPosition": "Frontend Intern",
+        "isDefault": false
+      },
+      {
+        "id": 9,
+        "title": "CV Fullstack Intern (3)",
+        "targetPosition": "Fullstack Intern",
+        "isDefault": false
+      }
+    ]
+  },
+  {
+    "email": "student_seed_fa92a6ca_4_1_7492@example.com",
+    "password": "Seed123!",
+    "fullName": "Phan Giang",
+    "phoneNumber": "0900000004",
+    "studentId": "SEFA92A6CA0004",
+    "cvs": [
+      {
+        "id": 10,
+        "title": "CV Backend Intern (1)",
+        "targetPosition": "Backend Intern",
+        "isDefault": true
+      },
+      {
+        "id": 11,
+        "title": "CV Frontend Intern (2)",
+        "targetPosition": "Frontend Intern",
+        "isDefault": false
+      },
+      {
+        "id": 12,
+        "title": "CV Fullstack Intern (3)",
+        "targetPosition": "Fullstack Intern",
+        "isDefault": false
+      }
+    ]
+  },
+  {
+    "email": "student_seed_fa92a6ca_5_1_7557@example.com",
+    "password": "Seed123!",
+    "fullName": "Tran Khanh",
+    "phoneNumber": "0900000005",
+    "studentId": "SEFA92A6CA0005",
+    "cvs": [
+      {
+        "id": 13,
+        "title": "CV Backend Intern (1)",
+        "targetPosition": "Backend Intern",
+        "isDefault": true
+      },
+      {
+        "id": 14,
+        "title": "CV Frontend Intern (2)",
+        "targetPosition": "Frontend Intern",
+        "isDefault": false
+      },
+      {
+        "id": 15,
+        "title": "CV Fullstack Intern (3)",
+        "targetPosition": "Fullstack Intern",
+        "isDefault": false
+      }
+    ]
+  },
+  {
+    "email": "student_seed_fa92a6ca_6_1_9876@example.com",
+    "password": "Seed123!",
+    "fullName": "Do Ngan",
+    "phoneNumber": "0900000006",
+    "studentId": "SEFA92A6CA0006",
+    "cvs": [
+      {
+        "id": 16,
+        "title": "CV Backend Intern (1)",
+        "targetPosition": "Backend Intern",
+        "isDefault": true
+      },
+      {
+        "id": 17,
+        "title": "CV Frontend Intern (2)",
+        "targetPosition": "Frontend Intern",
+        "isDefault": false
+      },
+      {
+        "id": 18,
+        "title": "CV Fullstack Intern (3)",
+        "targetPosition": "Fullstack Intern",
+        "isDefault": false
+      }
+    ]
+  },
+  {
+    "email": "student_seed_fa92a6ca_7_1_1304@example.com",
+    "password": "Seed123!",
+    "fullName": "Le Phuong",
+    "phoneNumber": "0900000007",
+    "studentId": "SEFA92A6CA0007",
+    "cvs": [
+      {
+        "id": 19,
+        "title": "CV Backend Intern (1)",
+        "targetPosition": "Backend Intern",
+        "isDefault": true
+      },
+      {
+        "id": 20,
+        "title": "CV Frontend Intern (2)",
+        "targetPosition": "Frontend Intern",
+        "isDefault": false
+      },
+      {
+        "id": 21,
+        "title": "CV Fullstack Intern (3)",
+        "targetPosition": "Fullstack Intern",
+        "isDefault": false
+      }
+    ]
+  },
+  {
+    "email": "student_seed_fa92a6ca_8_1_5458@example.com",
+    "password": "Seed123!",
+    "fullName": "Phan Giang",
+    "phoneNumber": "0900000008",
+    "studentId": "SEFA92A6CA0008",
+    "cvs": [
+      {
+        "id": 22,
+        "title": "CV Backend Intern (1)",
+        "targetPosition": "Backend Intern",
+        "isDefault": true
+      },
+      {
+        "id": 23,
+        "title": "CV Frontend Intern (2)",
+        "targetPosition": "Frontend Intern",
+        "isDefault": false
+      },
+      {
+        "id": 24,
+        "title": "CV Fullstack Intern (3)",
+        "targetPosition": "Fullstack Intern",
+        "isDefault": false
+      }
+    ]
+  },
+  {
+    "email": "student_seed_fa92a6ca_9_1_2860@example.com",
+    "password": "Seed123!",
+    "fullName": "Le Linh",
+    "phoneNumber": "0900000009",
+    "studentId": "SEFA92A6CA0009",
+    "cvs": [
+      {
+        "id": 25,
+        "title": "CV Backend Intern (1)",
+        "targetPosition": "Backend Intern",
+        "isDefault": true
+      },
+      {
+        "id": 26,
+        "title": "CV Frontend Intern (2)",
+        "targetPosition": "Frontend Intern",
+        "isDefault": false
+      },
+      {
+        "id": 27,
+        "title": "CV Fullstack Intern (3)",
+        "targetPosition": "Fullstack Intern",
+        "isDefault": false
+      }
+    ]
+  },
+  {
+    "email": "student_seed_fa92a6ca_10_1_7488@example.com",
+    "password": "Seed123!",
+    "fullName": "Do Vy",
+    "phoneNumber": "0900000010",
+    "studentId": "SEFA92A6CA0010",
+    "cvs": [
+      {
+        "id": 28,
+        "title": "CV Backend Intern (1)",
+        "targetPosition": "Backend Intern",
+        "isDefault": true
+      },
+      {
+        "id": 29,
+        "title": "CV Frontend Intern (2)",
+        "targetPosition": "Frontend Intern",
+        "isDefault": false
+      },
+      {
+        "id": 30,
+        "title": "CV Fullstack Intern (3)",
+        "targetPosition": "Fullstack Intern",
+        "isDefault": false
+      }
+    ]
+  }
+]

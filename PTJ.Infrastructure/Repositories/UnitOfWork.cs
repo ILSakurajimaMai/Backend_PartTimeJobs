@@ -22,10 +22,13 @@ public class UnitOfWork : IUnitOfWork
 
     // Profiles
     private IRepository<Profile>? _profiles;
-    private IRepository<ProfileSkill>? _profileSkills;
-    private IRepository<ProfileExperience>? _profileExperiences;
-    private IRepository<ProfileEducation>? _profileEducations;
-    private IRepository<ProfileCertificate>? _profileCertificates;
+
+    // CVs
+    private IRepository<CV>? _cvs;
+    private IRepository<CVSkill>? _cvSkills;
+    private IRepository<CVExperience>? _cvExperiences;
+    private IRepository<CVEducation>? _cvEducations;
+    private IRepository<CVCertificate>? _cvCertificates;
 
     // Jobs
     private IRepository<JobPost>? _jobPosts;
@@ -61,10 +64,13 @@ public class UnitOfWork : IUnitOfWork
 
     // Profiles
     public IRepository<Profile> Profiles => _profiles ??= new GenericRepository<Profile>(_context);
-    public IRepository<ProfileSkill> ProfileSkills => _profileSkills ??= new GenericRepository<ProfileSkill>(_context);
-    public IRepository<ProfileExperience> ProfileExperiences => _profileExperiences ??= new GenericRepository<ProfileExperience>(_context);
-    public IRepository<ProfileEducation> ProfileEducations => _profileEducations ??= new GenericRepository<ProfileEducation>(_context);
-    public IRepository<ProfileCertificate> ProfileCertificates => _profileCertificates ??= new GenericRepository<ProfileCertificate>(_context);
+
+    // CVs
+    public IRepository<CV> CVs => _cvs ??= new GenericRepository<CV>(_context);
+    public IRepository<CVSkill> CVSkills => _cvSkills ??= new GenericRepository<CVSkill>(_context);
+    public IRepository<CVExperience> CVExperiences => _cvExperiences ??= new GenericRepository<CVExperience>(_context);
+    public IRepository<CVEducation> CVEducations => _cvEducations ??= new GenericRepository<CVEducation>(_context);
+    public IRepository<CVCertificate> CVCertificates => _cvCertificates ??= new GenericRepository<CVCertificate>(_context);
 
     // Jobs
     public IRepository<JobPost> JobPosts => _jobPosts ??= new GenericRepository<JobPost>(_context);

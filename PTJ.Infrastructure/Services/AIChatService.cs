@@ -18,7 +18,7 @@ public class AIChatService : IAIChatService
     private readonly AppDbContext _dbContext;
     private readonly JobSearchPlugin _jobSearchPlugin;
     private readonly IdentityPlugin _identityPlugin;
-    private readonly ProfilePlugin _profilePlugin;
+    private readonly CVPlugin _cvPlugin;
     private readonly JobDetailPlugin _jobDetailPlugin;
 
     public AIChatService(
@@ -26,7 +26,7 @@ public class AIChatService : IAIChatService
         AppDbContext dbContext,
         JobSearchPlugin jobSearchPlugin,
         IdentityPlugin identityPlugin,
-        ProfilePlugin profilePlugin,
+        CVPlugin cvPlugin,
         JobDetailPlugin jobDetailPlugin,
         IConfiguration configuration)
     {
@@ -34,7 +34,7 @@ public class AIChatService : IAIChatService
         _dbContext = dbContext;
         _jobSearchPlugin = jobSearchPlugin;
         _identityPlugin = identityPlugin;
-        _profilePlugin = profilePlugin;
+        _cvPlugin = cvPlugin;
         _jobDetailPlugin = jobDetailPlugin;
         _configuration = configuration;
     }
@@ -124,7 +124,7 @@ public class AIChatService : IAIChatService
     {
         if (!_kernel.Plugins.Contains("JobSearch")) _kernel.Plugins.AddFromObject(_jobSearchPlugin, "JobSearch");
         if (!_kernel.Plugins.Contains("Identity")) _kernel.Plugins.AddFromObject(_identityPlugin, "Identity");
-        if (!_kernel.Plugins.Contains("Profile")) _kernel.Plugins.AddFromObject(_profilePlugin, "Profile");
+        if (!_kernel.Plugins.Contains("CV")) _kernel.Plugins.AddFromObject(_cvPlugin, "CV");
         if (!_kernel.Plugins.Contains("JobDetail")) _kernel.Plugins.AddFromObject(_jobDetailPlugin, "JobDetail");
     }
 

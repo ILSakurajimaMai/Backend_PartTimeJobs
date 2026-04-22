@@ -12,12 +12,12 @@ namespace PTJ.Infrastructure.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_Profiles_UserId",
                 schema: "seeker",
-                table: "Profiles");
+                table: "CVs");
 
             migrationBuilder.AddColumn<bool>(
                 name: "IsDefault",
                 schema: "seeker",
-                table: "Profiles",
+                table: "CVs",
                 type: "bit",
                 nullable: false,
                 defaultValue: false);
@@ -25,7 +25,7 @@ namespace PTJ.Infrastructure.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "TargetPosition",
                 schema: "seeker",
-                table: "Profiles",
+                table: "CVs",
                 type: "nvarchar(255)",
                 maxLength: 255,
                 nullable: true);
@@ -33,7 +33,7 @@ namespace PTJ.Infrastructure.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "Title",
                 schema: "seeker",
-                table: "Profiles",
+                table: "CVs",
                 type: "nvarchar(255)",
                 maxLength: 255,
                 nullable: true);
@@ -58,13 +58,13 @@ namespace PTJ.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Profiles_UserId",
                 schema: "seeker",
-                table: "Profiles",
+                table: "CVs",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Profiles_UserId_IsDefault",
                 schema: "seeker",
-                table: "Profiles",
+                table: "CVs",
                 columns: new[] { "UserId", "IsDefault" },
                 unique: true,
                 filter: "[IsDeleted] = 0 AND [IsDefault] = 1");
@@ -88,32 +88,32 @@ namespace PTJ.Infrastructure.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_Profiles_UserId_IsDefault",
                 schema: "seeker",
-                table: "Profiles");
+                table: "CVs");
 
             migrationBuilder.DropIndex(
                 name: "IX_Profiles_UserId",
                 schema: "seeker",
-                table: "Profiles");
+                table: "CVs");
 
             migrationBuilder.DropColumn(
                 name: "IsDefault",
                 schema: "seeker",
-                table: "Profiles");
+                table: "CVs");
 
             migrationBuilder.DropColumn(
                 name: "TargetPosition",
                 schema: "seeker",
-                table: "Profiles");
+                table: "CVs");
 
             migrationBuilder.DropColumn(
                 name: "Title",
                 schema: "seeker",
-                table: "Profiles");
+                table: "CVs");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Profiles_UserId",
                 schema: "seeker",
-                table: "Profiles",
+                table: "CVs",
                 column: "UserId",
                 unique: true,
                 filter: "[IsDeleted] = 0");

@@ -14,12 +14,15 @@ public interface IUnitOfWork : IDisposable
     IRepository<Company> Companies { get; }
     IRepository<CompanyRegistrationRequest> CompanyRegistrationRequests { get; }
 
-    // Profiles
+    // Profiles (1-1 with User)
     IRepository<Profile> Profiles { get; }
-    IRepository<ProfileSkill> ProfileSkills { get; }
-    IRepository<ProfileExperience> ProfileExperiences { get; }
-    IRepository<ProfileEducation> ProfileEducations { get; }
-    IRepository<ProfileCertificate> ProfileCertificates { get; }
+
+    // CVs
+    IRepository<CV> CVs { get; }
+    IRepository<CVSkill> CVSkills { get; }
+    IRepository<CVExperience> CVExperiences { get; }
+    IRepository<CVEducation> CVEducations { get; }
+    IRepository<CVCertificate> CVCertificates { get; }
 
     // Jobs
     IRepository<JobPost> JobPosts { get; }

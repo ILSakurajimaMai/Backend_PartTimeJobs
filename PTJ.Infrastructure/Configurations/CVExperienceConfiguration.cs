@@ -4,11 +4,11 @@ using PTJ.Domain.Entities;
 
 namespace PTJ.Infrastructure.Configurations;
 
-public class ProfileExperienceConfiguration : IEntityTypeConfiguration<ProfileExperience>
+public class CVExperienceConfiguration : IEntityTypeConfiguration<CVExperience>
 {
-    public void Configure(EntityTypeBuilder<ProfileExperience> builder)
+    public void Configure(EntityTypeBuilder<CVExperience> builder)
     {
-        builder.ToTable("ProfileExperiences", "seeker");
+        builder.ToTable("CVExperiences", "seeker");
 
         builder.HasKey(pe => pe.Id);
 
@@ -25,10 +25,9 @@ public class ProfileExperienceConfiguration : IEntityTypeConfiguration<ProfileEx
 
         builder.HasIndex(pe => pe.ProfileId);
 
-        builder.HasOne(pe => pe.Profile)
+        builder.HasOne(pe => pe.CV)
             .WithMany(p => p.Experiences)
             .HasForeignKey(pe => pe.ProfileId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }
-

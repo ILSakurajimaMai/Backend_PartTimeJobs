@@ -4,11 +4,11 @@ using PTJ.Domain.Entities;
 
 namespace PTJ.Infrastructure.Configurations;
 
-public class ProfileEducationConfiguration : IEntityTypeConfiguration<ProfileEducation>
+public class CVEducationConfiguration : IEntityTypeConfiguration<CVEducation>
 {
-    public void Configure(EntityTypeBuilder<ProfileEducation> builder)
+    public void Configure(EntityTypeBuilder<CVEducation> builder)
     {
-        builder.ToTable("ProfileEducations", "seeker");
+        builder.ToTable("CVEducations", "seeker");
 
         builder.HasKey(pe => pe.Id);
 
@@ -31,10 +31,9 @@ public class ProfileEducationConfiguration : IEntityTypeConfiguration<ProfileEdu
 
         builder.HasIndex(pe => pe.ProfileId);
 
-        builder.HasOne(pe => pe.Profile)
+        builder.HasOne(pe => pe.CV)
             .WithMany(p => p.Educations)
             .HasForeignKey(pe => pe.ProfileId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }
-

@@ -1,52 +1,53 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for AI assistants working with this repository.
 
 ## Project Overview
 
-This is a **Part-Time Job Finding Platform** REST API built with **.NET 9.0** using **Clean Architecture** principles. The solution is structured into four projects following Domain-Driven Design:
+**Part-Time Job Finding Platform** — REST API built with **.NET 10** using **Clean Architecture**.
 
-- **PTJ.Domain**: Core domain entities, interfaces, and business logic
-- **PTJ.Application**: Application services, DTOs, and mapping profiles
-- **PTJ.Infrastructure**: Data access (EF Core), repositories, and external services
-- **PTJ.API**: Web API controllers, middleware, and configuration
+```
+PTJ.Domain        → Core entities, interfaces, business logic (no dependencies)
+PTJ.Application   → Services interfaces, DTOs, AutoMapper (depends on Domain only)
+PTJ.Infrastructure → EF Core, repositories, service implementations (depends on App + Domain)
+PTJ.API           → Controllers, middleware, SignalR hubs, DI config (depends on all)
+```
+
+---
 
 ## Architecture Patterns
 
-### Clean Architecture Layers
-
-The project strictly follows dependency rules:
-- **PTJ.API** → depends on Application, Infrastructure, Domain
-- **PTJ.Infrastructure** → depends on Application, Domain
-- **PTJ.Application** → depends on Domain only
-- **PTJ.Domain** → no dependencies (pure business logic)
-
 ### Repository Pattern & Unit of Work
 
-All data access goes through the **Unit of Work** pattern:
-- `IRepository<T>` provides generic CRUD operations for all entities
-- `IUnitOfWork` exposes typed repositories and manages transactions
-- Implementation is in `PTJ.Infrastructure/Repositories/GenericRepository.cs` and `UnitOfWork.cs`
+All data access goes through `IUnitOfWork`:
 
-Example usage in services:
 ```csharp
 var user = await _unitOfWork.Users.FirstOrDefaultAsync(u => u.Email == email);
 await _unitOfWork.SaveChangesAsync();
 ```
 
+- `IRepository<T>` — generic CRUD (`FindAsync`, `FirstOrDefaultAsync`, `AddAsync`, `Update`, `Remove`)
+- `IUnitOfWork` — exposes typed repositories, manages transactions
+- Implementation: `PTJ.Infrastructure/Repositories/GenericRepository.cs`, `UnitOfWork.cs`
+
 ### Base Entities
 
-All entities inherit from `BaseEntity` (in `PTJ.Domain/Common/BaseEntity.cs`) which provides:
-- `Id` (int, primary key)
-- `CreatedAt`, `UpdatedAt` (automatic timestamps)
-- `IsDeleted` (soft delete flag)
-- `RowVersion` (concurrency token)
+All entities inherit from `BaseAuditableEntity` → `BaseEntity`:
 
-The `AppDbContext.SaveChangesAsync()` automatically sets these values. Soft deletes are implemented - entities are never physically removed.
+| Property | Type | Notes |
+|---|---|---|
+| `Id` | int | PK, auto-increment |
+| `CreatedAt` | DateTime | UTC, auto-set |
+| `UpdatedAt` | DateTime | UTC, auto-set |
+| `IsDeleted` | bool | Soft delete flag |
+| `RowVersion` | byte[] | Optimistic concurrency |
+
+`AppDbContext.SaveChangesAsync()` sets timestamps automatically. Soft deletes are enforced — entities are never physically removed unless explicitly stated in migrations.
 
 ### Result Pattern
 
-All service methods return `Result` or `Result<T>` (defined in `PTJ.Application/Common/Result.cs`):
+All service methods return `Result<T>`:
+
 ```csharp
 public class Result<T>
 {
@@ -57,543 +58,224 @@ public class Result<T>
 }
 ```
 
-This provides consistent error handling across the API.
+Controllers map `Result` to HTTP responses:
+- `result.Success = false` → `BadRequest` or `NotFound`
+- `result.Success = true` → `Ok` or `CreatedAtAction`
 
-### Authentication & Authorization
+### Authentication
 
-- **JWT Bearer authentication** with access tokens (60 min) and refresh tokens (7 days)
-- Configuration in `appsettings.json` under `"Jwt"` section
-- `IJwtService` generates tokens, `IAuthService` handles login/register/refresh
-- Role-based authorization: Users have roles (ADMIN, EMPLOYER, STUDENT) via `UserRole` join table
-- Custom filter `AuthorizeCompanyOwnerFilter` ensures companies can only modify their own data
+- **JWT Bearer**: Access token (60 min) + Refresh token (7 days)
+- Config: `appsettings.json` → `"Jwt"` section
+- Services: `IJwtService` (token generation), `IAuthService` (login/register/refresh)
+- Role-based: `[Authorize(Roles = "STUDENT,ADMIN")]`
+- Custom filter: `AuthorizeCompanyOwnerFilter` (company ownership check)
 
-### User Registration & Role Assignment Workflow
+---
 
-**CRITICAL**: Follow this workflow when working with user registration and company creation:
+## Domain Entities
 
-1. **New User Registration** (`POST /api/auth/register`):
-   - All new users are automatically assigned the **STUDENT** role (AuthService.cs:38-48)
-   - A `Profile` entity is automatically created for every new user
-   - Users start with STUDENT role only
+### Auth (`auth` schema)
 
-2. **Company Registration Request** (`POST /api/Companies`):
-   - Any authenticated user can submit a company registration request
-   - Request is stored in `CompanyRegistrationRequests` table with status `Pending`
-   - **NO Company entity is created** at this stage
-   - **NO EMPLOYER role is assigned** at this stage
-   - User must wait for admin approval
+| Entity | Description |
+|---|---|
+| `User` | Base user (Email, PasswordHash, FullName, IsLocked) |
+| `Role` | ADMIN (id=1), EMPLOYER (id=2), STUDENT (id=3) |
+| `UserRole` | Many-to-many join |
+| `RefreshToken` | JWT refresh tokens |
 
-3. **Admin Approval Process** (`POST /api/CompanyRequests/approve`):
-   - Only users with ADMIN role can approve requests
-   - When approved (CompanyService.cs:214-265):
-     - `Company` entity is created and linked to the user
-     - `CompanyRegistrationRequest` status updated to `Approved`
-     - **EMPLOYER role is assigned** to the user (lines 252-263)
-     - User now has both STUDENT and EMPLOYER roles
-   - If rejected, request status is set to `Rejected` with rejection reason
+### Seeker (`seeker` schema)
 
-4. **Multi-Role Support**:
-   - Users can have multiple roles simultaneously (via UserRole join table)
-   - A user with EMPLOYER role still retains their STUDENT role
-   - Roles are seeded in database: ADMIN (id=1), EMPLOYER (id=2), STUDENT (id=3)
+| Entity | Description |
+|---|---|
+| `Profile` | Basic personal info — **1-1 with User**. Created automatically on STUDENT registration. Fields: `FullName`, `DateOfBirth`, `PhoneNumber`, `Email`, `Address`. |
+| `CV` | Detailed professional profile — **1-N with User and Profile**. Each user can have multiple CVs; one is marked `IsDefault`. |
+| `CVSkill` | Skills in a CV |
+| `CVExperience` | Work experience in a CV |
+| `CVEducation` | Education history in a CV |
+| `CVCertificate` | Certificates in a CV |
 
-## Common Development Commands
+### Jobs (`jobs` schema)
 
-### Build and Run
+| Entity | Description |
+|---|---|
+| `JobPost` | Job posting with title, description, salary, location, status |
+| `JobShift` | Work shifts (start/end time, day of week) |
+| `JobPostSkill` | Required skills for a job |
+| `Application` | Job application (STUDENT → JobPost), references a CV |
+| `ApplicationHistory` | Status change history |
+| `ApplicationStatusLookup` | Reference: Pending/Reviewing/Accepted/Rejected/Withdrawn |
+
+### Companies (`companies` schema)
+
+| Entity | Description |
+|---|---|
+| `Company` | Company profile (created only after admin approval) |
+| `CompanyRegistrationRequest` | Pending company registration request |
+
+### Chat (`chat` schema)
+
+| Entity | Description |
+|---|---|
+| `ChatConversation` | Conversation between 2 users (with optional JobPost context) |
+| `ChatMessage` | Individual messages |
+
+### Logging (`logging` schema)
+
+| Entity | Description |
+|---|---|
+| `UserActivityLog` | HTTP request log (userId, method, path, statusCode, durationMs) |
+| `SystemErrorLog` | Unhandled exceptions (level, message, stackTrace) |
+
+---
+
+## Service Layer
+
+Each feature has interface in `PTJ.Application/Services/` and implementation in `PTJ.Infrastructure/Services/`:
+
+| Interface | Implementation | Responsibility |
+|---|---|---|
+| `IAuthService` | `AuthService` | Login, register, refresh tokens |
+| `IProfileService` | `ProfileService` | Basic profile (1-1 User) — get/update |
+| `ICVService` | `CVService` | CV management — CRUD, set-default |
+| `IJobPostService` | `JobPostService` | Job posting CRUD, search |
+| `ICompanyService` | `CompanyService` | Company management, registration requests |
+| `IApplicationService` | `ApplicationService` | Job application workflow |
+| `IChatService` | `ChatService` | Chat conversations and messages |
+| `IFileStorageService` | `LocalFileStorageService` | File upload/download |
+| `ISearchService` | `SearchService` | Cross-entity search |
+| `IActivityLogService` | `ActivityLogService` | Activity log write/read |
+| `IErrorLogService` | `ErrorLogService` | Error log write/read |
+
+---
+
+## User Registration Workflow
+
+**CRITICAL**: Follow this when working with registration or company creation.
+
+### Student Registration (`POST /api/auth/register` with role=STUDENT):
+1. Create `User` entity
+2. Assign **STUDENT** role
+3. Create **`Profile`** entity (FullName, Email, PhoneNumber from registration DTO)
+4. Create default **`CV`** entity linked to Profile (`ProfileId`) and User (`UserId`), `IsDefault = true`
+
+### Company Registration Request (`POST /api/companies`):
+- Any authenticated user can submit
+- Creates `CompanyRegistrationRequest` (status = Pending)
+- **No `Company` entity created yet**
+- **No EMPLOYER role assigned yet**
+
+### Admin Approval (`POST /api/companyrequests/approve`):
+- Creates `Company` entity linked to user
+- Sets request status = Approved
+- Assigns **EMPLOYER** role to user
+- User now has both STUDENT + EMPLOYER roles
+
+---
+
+## AutoMapper
+
+Mapping profiles in `PTJ.Application/Mapping/MappingCV.cs` (class `MappingCV : AutoMapper.Profile`).
+
+**Important**: Use `PTJ.Domain.Entities.Profile` (fully qualified) to avoid ambiguity with `AutoMapper.Profile`.
+
+Registered in DI: `builder.Services.AddAutoMapper(typeof(MappingCV))`
+
+---
+
+## API Controllers
+
+All in `PTJ.API/Controllers/`:
+
+| Controller | Route | Roles |
+|---|---|---|
+| `AuthController` | `/api/auth` | Public |
+| `ProfileController` | `/api/profile` | Authenticated |
+| `CVsController` | `/api/cvs` | Public (read), STUDENT/ADMIN (write) |
+| `JobPostsController` | `/api/jobposts` | Public (read), EMPLOYER/ADMIN (write) |
+| `CompaniesController` | `/api/companies` | Public (read), EMPLOYER/ADMIN (write) |
+| `CompanyRequestsController` | `/api/companyrequests` | ADMIN |
+| `ApplicationsController` | `/api/applications` | Authenticated |
+| `ChatController` | `/api/chat` | Authenticated |
+| `AIChatController` | `/api/aichat` | Authenticated |
+| `FilesController` | `/api/files` | Public (download), Authenticated (upload/delete) |
+| `AdminController` | `/api/admin` | ADMIN |
+| `LogsController` | `/api/logs` | ADMIN |
+
+---
+
+## Real-time Chat (SignalR)
+
+**Hub:** `PTJ.API/Hubs/ChatHub.cs`
+- WebSocket endpoint: `ws://localhost:5000/hubs/chat?access_token=JWT`
+- JWT auth via query string
+- User auto-joined to group by userId
+
+---
+
+## Middleware & Filters
+
+| Component | Purpose |
+|---|---|
+| `GlobalExceptionMiddleware` | Catch unhandled exceptions → standardized JSON + log to DB |
+| `RequestLoggingMiddleware` | Log every HTTP request to `UserActivityLog` |
+| `ValidationFilter` | Global model validation filter |
+| `AuthorizeCompanyOwnerFilter` | Ensure EMPLOYER can only modify their own company data |
+
+---
+
+## File Storage
+
+- Local storage, configured in `appsettings.json` → `"FileStorage"`
+- Default upload path: `Uploads/`
+- Max size: 10MB
+- Allowed: `.jpg`, `.jpeg`, `.png`, `.pdf`, `.doc`, `.docx`
+- Metadata tracked in `FileEntity` table
+
+---
+
+## Database
+
+- **SQL Server** via **EF Core 10**
+- Connection string: `appsettings.json` → `"ConnectionStrings:Default"`
+- Fluent API configs: `PTJ.Infrastructure/Configurations/`
+- `AppDbContext` loads all via `ApplyConfigurationsFromAssembly`
+
+### Key EF Core Quirks
+
+- **Soft delete query filters** registered on all entities: `HasQueryFilter(e => !e.IsDeleted)`
+- **RowVersion / concurrency**: If SQL triggers interfere with EF's `OUTPUT` clause, use `.UseUpdateRowVersion()` or drop conflicting triggers
+- **Schema separation**: Each domain uses its own schema (`auth`, `seeker`, `jobs`, `companies`, `chat`, `logging`)
+
+---
+
+## Common Commands
+
 ```bash
-# Clean solution
-dotnet clean
-
-# Build solution
+# Build
 dotnet build
 
-# Run the API (from solution root)
+# Run
 dotnet run --project PTJ.API
 
-# Run with specific configuration
-dotnet run --project PTJ.API --configuration Release
-```
+# Add migration
+dotnet ef migrations add <Name> --project PTJ.Infrastructure --startup-project PTJ.API
 
-### Database Migrations
-```bash
-# Add new migration (run from solution root)
-dotnet ef migrations add <MigrationName> --project PTJ.Infrastructure --startup-project PTJ.API
-
-# Update database
+# Apply migration
 dotnet ef database update --project PTJ.Infrastructure --startup-project PTJ.API
 
 # Remove last migration
 dotnet ef migrations remove --project PTJ.Infrastructure --startup-project PTJ.API
-
-# Generate SQL script
-dotnet ef migrations script --project PTJ.Infrastructure --startup-project PTJ.API
 ```
 
-### Package Management
-```bash
-# Add package to specific project
-dotnet add PTJ.API package <PackageName>
-
-# Remove package
-dotnet remove PTJ.API package <PackageName>
-
-# Restore packages
-dotnet restore
-```
-
-## Database Configuration
-
-- **SQL Server** via Entity Framework Core 9.0
-- Connection string in `appsettings.json` under `"ConnectionStrings:Default"`
-- Default: `Server=localhost;Database=PartTimeJobs;Trusted_Connection=True;TrustServerCertificate=True`
-- Entity configurations use Fluent API in `PTJ.Infrastructure/Configurations/`
-- `AppDbContext` applies all configurations via `ApplyConfigurationsFromAssembly`
-
-## Key Domain Entities
-
-### Authentication
-- `User` - base user entity (Email, PasswordHash, FullName, etc.)
-- `Role` - user roles (Student, Company, Admin)
-- `UserRole` - many-to-many join table
-- `RefreshToken` - stores refresh tokens for JWT authentication
-
-### Company & Jobs
-- `Company` - company profiles (created only after admin approval, linked to User with EMPLOYER role)
-- `CompanyRegistrationRequest` - pending company registration requests (status: Pending/Approved/Rejected)
-- `JobPost` - job postings with title, description, salary, location
-- `JobShift` - work shifts for a job (start/end time, day of week)
-- `JobPostSkill` - required skills for a job
-
-### Student Profiles
-- `Profile` - student profile (linked to User with role "Student")
-- `ProfileSkill`, `ProfileExperience`, `ProfileEducation`, `ProfileCertificate` - profile details
-
-### Applications
-- `Application` - job applications from students
-- `ApplicationHistory` - tracks status changes
-- `ApplicationStatusLookup` - reference table for statuses (Pending, Accepted, Rejected, etc.)
-
-### Chat (Real-time Messaging)
-- `ChatConversation` - conversations between employers and students
-- `ChatMessage` - individual messages within conversations
-- Stored in `chat` schema for better organization
-- Supports typing indicators, read receipts, and unread counts
-
-## Service Layer Structure
-
-Each major feature has an interface in `PTJ.Application/Services/` and implementation in `PTJ.Infrastructure/Services/`:
-
-- `IAuthService` / `AuthService` - Authentication (login, register, refresh tokens)
-- `IJobPostService` / `JobPostService` - Job posting management
-- `ICompanyService` / `CompanyService` - Company profile and registration requests
-- `IProfileService` / `ProfileService` - Student profile management
-- `IApplicationService` / `ApplicationService` - Job application workflow
-- `IFileStorageService` / `LocalFileStorageService` - File uploads (resumes, certificates)
-- `ISearchService` / `SearchService` - Search functionality
-- `IChatService` / `ChatService` - Real-time chat messaging
-
-All services use `IUnitOfWork` for data access and return `Result<T>` objects.
-
-## API Controllers
-
-Controllers in `PTJ.API/Controllers/`:
-- `AuthController` - POST /api/auth/login, /register, /refresh
-- `JobPostsController` - CRUD for job posts, search
-- `CompaniesController` - Company profile management, search
-- `CompanyRequestsController` - Admin approval of company registrations
-- `ProfilesController` - Student profile management
-- `ApplicationsController` - Job application submission and tracking
-- `FilesController` - File upload/download
-- `ChatController` - Chat conversation and message management (REST API)
-
-### Search Endpoints
-
-The API provides optimized search functionality using **SQL LIKE** queries via EF Core:
-
-**Job Post Search** (`GET /api/JobPosts/search`):
-```http
-GET /api/JobPosts/search?searchTerm=developer&pageNumber=1&pageSize=10&sortBy=salary&sortDescending=true
-```
-- Searches across: `Title`, `Description`, `Location`
-- Returns only active job posts
-- Supports pagination and sorting (by salary or createdAt)
-- Uses `EF.Functions.Like()` for database-level LIKE queries
-
-**Company Search** (`GET /api/Companies/search`):
-```http
-GET /api/Companies/search?searchTerm=tech&pageNumber=1&pageSize=10&sortDescending=true
-```
-- Searches across: `Name`, `Description`, `Industry`, `Address`
-- Supports pagination and sorting (by createdAt)
-- Uses `EF.Functions.Like()` for database-level LIKE queries
-
-**Implementation Details**:
-- Search logic in `JobPostService.SearchAsync` (JobPostService.cs:66-120) and `CompanyService.SearchAsync` (CompanyService.cs:63-102)
-- Uses `IRepository.FindAsync()` with LINQ expressions that compile to SQL LIKE
-- Pattern: `var searchTerm = $"%{parameters.SearchTerm}%";` then `EF.Functions.Like(field, searchTerm)`
-- This approach ensures queries execute in the database, not in-memory
-
-## Real-time Chat with SignalR
-
-The API provides **real-time chat messaging** between EMPLOYER and STUDENT users using **SignalR**.
-
-### SignalR Hub
-
-**ChatHub** (`PTJ.API/Hubs/ChatHub.cs`):
-- WebSocket endpoint: `ws://localhost:5000/hubs/chat` (or `wss://` for HTTPS)
-- Requires JWT authentication via query string: `?access_token=YOUR_JWT_TOKEN`
-- Automatic user group management based on userId
-
-**Hub Methods** (callable from client):
-```typescript
-// Send a message
-SendMessage(dto: SendMessageDto): void
-
-// Mark messages as read
-MarkAsRead(conversationId: number): void
-
-// Update typing status
-UpdateTyping(conversationId: number, isTyping: boolean): void
-
-// Join/leave conversation groups
-JoinConversation(conversationId: number): void
-LeaveConversation(conversationId: number): void
-```
-
-**Client Events** (received from server):
-```typescript
-// Receive a new message
-ReceiveMessage(message: ChatMessageDto): void
-
-// Messages marked as read
-MessagesMarkedAsRead(conversationId: number): void
-
-// User typing status changed
-UserTyping(userId: number, isTyping: boolean): void
-
-// Error occurred
-Error(message: string): void
-```
-
-### Chat REST API Endpoints
-
-**Get or create conversation** (`POST /api/Chat/conversations`):
-```http
-POST /api/Chat/conversations
-{
-  "recipientId": 123,
-  "jobPostId": 456  // optional
-}
-```
-
-**Get user's conversations** (`GET /api/Chat/conversations`):
-```http
-GET /api/Chat/conversations?pageNumber=1&pageSize=20
-```
-
-**Get conversation messages** (`GET /api/Chat/conversations/{id}/messages`):
-```http
-GET /api/Chat/conversations/123/messages?pageNumber=1&pageSize=50
-```
-
-**Send message (HTTP alternative)** (`POST /api/Chat/messages`):
-```http
-POST /api/Chat/messages
-{
-  "conversationId": 123,  // or recipientId
-  "content": "Hello!"
-}
-```
-
-**Mark as read** (`POST /api/Chat/conversations/{id}/read`):
-```http
-POST /api/Chat/conversations/123/read
-```
-
-**Get unread count** (`GET /api/Chat/unread-count`):
-```http
-GET /api/Chat/unread-count
-```
-
-### Chat Features
-
-- **One-to-one conversations** between EMPLOYER and STUDENT
-- **Real-time message delivery** via SignalR WebSockets
-- **Read receipts** with timestamps
-- **Typing indicators** for better UX
-- **Unread message counts** per conversation
-- **Message pagination** for performance
-- **Conversation context** with optional JobPost link
-- **Fallback REST API** for clients without WebSocket support
-
-### Implementation Architecture
-
-**Domain Layer** (`PTJ.Domain/Entities/`):
-- `ChatConversation` - conversation entity with employer/student relationship
-- `ChatMessage` - message entity with read status
-
-**Application Layer** (`PTJ.Application/`):
-- `IChatService` interface
-- DTOs: `ChatConversationDto`, `ChatMessageDto`, `SendMessageDto`
-
-**Infrastructure Layer** (`PTJ.Infrastructure/Services/`):
-- `ChatService` - implements business logic
-- Uses `IUnitOfWork` for database operations
-- Stores data in `chat` schema
-
-**API Layer** (`PTJ.API/`):
-- `ChatHub` - SignalR hub for real-time communication
-- `ChatController` - REST API endpoints
-- JWT authentication for both WebSocket and HTTP
-
-### Client Connection Example (JavaScript)
-
-```javascript
-import * as signalR from "@microsoft/signalr";
-
-const connection = new signalR.HubConnectionBuilder()
-    .withUrl("http://localhost:5000/hubs/chat", {
-        accessTokenFactory: () => yourJwtToken
-    })
-    .withAutomaticReconnect()
-    .build();
-
-// Subscribe to events
-connection.on("ReceiveMessage", (message) => {
-    console.log("New message:", message);
-});
-
-connection.on("UserTyping", (userId, isTyping) => {
-    console.log(`User ${userId} is ${isTyping ? 'typing' : 'not typing'}`);
-});
-
-// Start connection
-await connection.start();
-
-// Send message
-await connection.invoke("SendMessage", {
-    recipientId: 123,
-    content: "Hello!"
-});
-
-// Update typing status
-await connection.invoke("UpdateTyping", conversationId, true);
-```
-
-### CORS Configuration for SignalR
-
-CORS is configured in Program.cs to support SignalR:
-- `AllowCredentials()` is required for SignalR
-- Frontend origins must be explicitly listed (not `AllowAnyOrigin()`)
-- Default origins: `http://localhost:3000`, `http://localhost:5173`
-
-## Middleware & Filters
-
-- `GlobalExceptionMiddleware` - Catches all unhandled exceptions and returns standardized JSON responses
-- `ValidationFilter` - Global validation filter (registered in Program.cs)
-- `AuthorizeCompanyOwnerFilter` - Custom authorization for company-owned resources
-
-## AutoMapper
-
-- Mapping profiles defined in `PTJ.Application/Mapping/MappingProfile.cs`
-- Maps between entities and DTOs (e.g., `User` ↔ `RegisterDto`, `JobPost` ↔ `JobPostDto`)
-- Registered in DI: `builder.Services.AddAutoMapper(typeof(MappingProfile))`
-
-## File Storage
-
-- Local file storage configured in `appsettings.json` under `"FileStorage"`
-- Default upload path: `Uploads/`
-- Max file size: 10MB (10485760 bytes)
-- Allowed extensions: .jpg, .jpeg, .png, .pdf, .doc, .docx
-- Files are tracked in `FileEntity` table with metadata
-
-## CORS & Swagger
-
-- CORS policy "AllowAll" allows all origins (configured for development)
-- Swagger UI available at `/swagger` in development mode
-- JWT Bearer authentication configured in Swagger for testing
-
-## Logging System
-
-The application implements a comprehensive logging system using **Serilog** and custom database logging for tracking user activities and system errors.
-
-### Serilog Configuration
-
-**Packages Used**:
-- `Serilog.AspNetCore` - Core Serilog integration for ASP.NET Core
-- `Serilog.Sinks.MSSqlServer` - SQL Server sink (optional, for future use)
-- `Serilog.Enrichers.Environment` - Adds machine name and environment info to logs
-
-**Configuration** (`appsettings.Development.json`):
-```json
-{
-  "Serilog": {
-    "MinimumLevel": {
-      "Default": "Information",
-      "Override": {
-        "Microsoft": "Warning",
-        "Microsoft.AspNetCore": "Warning",
-        "Microsoft.EntityFrameworkCore": "Information"
-      }
-    },
-    "WriteTo": [
-      { "Name": "Console" },
-      { "Name": "File", "Args": { "path": "logs/app-.txt", "rollingInterval": "Day" } }
-    ]
-  }
-}
-```
-
-**Log Files**: Stored in `logs/app-YYYYMMDD.txt` with daily rotation.
-
-### Database Logging Tables
-
-Two dedicated tables in the `logging` schema track activities and errors:
-
-**UserActivityLog** (`logging.UserActivityLogs`):
-- Logs every HTTP request with user context
-- Captures: UserId (from JWT), HTTP method, path, query string, IP address, user agent, status code, duration
-- Indexed on UserId and Timestamp for fast queries
-- Foreign key to Users table (nullable, for anonymous requests)
-
-**SystemErrorLog** (`logging.SystemErrorLogs`):
-- Logs all unhandled exceptions and errors
-- Captures: Error level, message, exception type, stack trace, inner exception, request context, user ID
-- Indexed on Level and Timestamp
-- Foreign key to Users table (nullable)
-
-### Logging Services
-
-**IActivityLogService** / **ActivityLogService**:
-```csharp
-// Log user activity
-await _activityLogService.LogActivityAsync(
-    userId: 123,
-    httpMethod: "POST",
-    path: "/api/auth/login",
-    queryString: null,
-    ipAddress: "192.168.1.1",
-    userAgent: "Mozilla/5.0...",
-    statusCode: 200,
-    durationMs: 45
-);
-
-// Retrieve logs with filtering
-var (logs, totalCount) = await _activityLogService.GetActivityLogsAsync(
-    userId: 123,
-    startDate: DateTime.UtcNow.AddDays(-7),
-    endDate: DateTime.UtcNow,
-    pageNumber: 1,
-    pageSize: 50
-);
-```
-
-**IErrorLogService** / **ErrorLogService**:
-```csharp
-// Log system error
-await _errorLogService.LogErrorAsync(
-    level: "Critical",
-    message: "Database connection failed",
-    exception: ex,
-    userId: 123,
-    requestPath: "/api/jobposts",
-    httpMethod: "GET",
-    ipAddress: "192.168.1.1"
-);
-
-// Retrieve error logs
-var (logs, totalCount) = await _errorLogService.GetErrorLogsAsync(
-    level: "Critical",
-    startDate: DateTime.UtcNow.AddDays(-1),
-    pageNumber: 1,
-    pageSize: 50
-);
-```
-
-### Middleware
-
-**RequestLoggingMiddleware**:
-- Automatically logs every HTTP request
-- Extracts `UserId` from JWT claims (supports `ClaimTypes.NameIdentifier`, `sub`, `userId`, `id`)
-- Measures request duration using `Stopwatch`
-- Captures client IP (supports `X-Forwarded-For` and `X-Real-IP` headers for proxy scenarios)
-- Logs to database via `IActivityLogService`
-- Registered in `Program.cs` after authentication middleware
-
-**GlobalExceptionMiddleware** (Enhanced):
-- Catches all unhandled exceptions
-- Logs errors to database via `IErrorLogService` with full context:
-  - Exception details (type, message, stack trace, inner exception)
-  - User context (extracted from JWT)
-  - Request details (path, method, query string, IP, user agent)
-  - Error severity level (Warning, Error, Critical)
-- Returns standardized JSON error responses
-- Never throws exceptions during logging (fail-safe design)
-
-### JWT Claims Extraction
-
-Both middleware components extract user identity from JWT tokens using this priority order:
-1. `ClaimTypes.NameIdentifier` (standard .NET claim)
-2. `sub` (standard JWT claim)
-3. `userId` (custom claim)
-4. `id` (custom claim)
-
-This ensures compatibility with various JWT token formats.
-
-### Admin Logging Endpoints
-
-**LogsController** (`/api/Logs`) - Requires `ADMIN` role:
-
-**Get Activity Logs**:
-```http
-GET /api/Logs/activities?userId=123&startDate=2024-01-01&pageNumber=1&pageSize=50
-```
-
-**Get Error Logs**:
-```http
-GET /api/Logs/errors?level=Critical&startDate=2024-01-01&pageNumber=1&pageSize=50
-```
-
-**Get Activity Statistics**:
-```http
-GET /api/Logs/activities/stats?startDate=2024-01-01&endDate=2024-01-31
-```
-Returns:
-- Total requests, successful/failed counts
-- Unique users, anonymous requests
-- Average response time
-- Top 10 most accessed paths
-
-**Get Error Statistics**:
-```http
-GET /api/Logs/errors/stats?startDate=2024-01-01&endDate=2024-01-31
-```
-Returns:
-- Error counts by level (Critical/Error/Warning)
-- Top 10 exception types
-- Top 10 error-prone endpoints
-
-### Client IP Detection
-
-The logging system intelligently detects client IP addresses considering proxy/load balancer scenarios:
-1. Check `X-Forwarded-For` header (takes first IP from comma-separated list)
-2. Check `X-Real-IP` header
-3. Fallback to `HttpContext.Connection.RemoteIpAddress`
-
-This ensures accurate IP logging in both development and production environments.
-
-### Best Practices
-
-- **Logging Never Fails**: Both logging services wrap operations in try-catch blocks to prevent logging errors from crashing the application
-- **Performance**: Activity logs use async operations and don't block request processing
-- **Security**: Sensitive data (passwords, tokens) should never be logged
-- **Retention**: Consider implementing log retention policies to manage database size
-- **Monitoring**: Use log statistics endpoints to identify performance bottlenecks and error patterns
+---
 
 ## Important Notes
 
-- All timestamps use **UTC** (`DateTime.UtcNow`)
-- Password hashing uses **BCrypt** (via BCrypt.Net-Next package)
-- Concurrency conflicts handled via `RowVersion` (optimistic concurrency)
-- Soft deletes are enforced - check `IsDeleted` flag in queries
-- The `AppDbContext` automatically handles soft deletes in `SaveChangesAsync`
+- All timestamps: **UTC** (`DateTime.UtcNow`)
+- Password hashing: **BCrypt** (`BCrypt.Net-Next`)
+- Concurrency: **RowVersion** (optimistic concurrency, byte[])
+- Soft deletes enforced everywhere — check `IsDeleted` in raw queries
+- CORS: Configured for SignalR — must use `AllowCredentials()` + explicit origins (no `AllowAnyOrigin`)
+- Swagger: Available at `/swagger` in development, JWT Bearer auth pre-configured
+- **Never log passwords or tokens**
+- Search uses `EF.Functions.Like()` — executes at DB level, not in-memory

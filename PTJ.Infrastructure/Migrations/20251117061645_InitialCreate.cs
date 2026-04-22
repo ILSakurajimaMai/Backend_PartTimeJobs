@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -168,7 +168,7 @@ namespace PTJ.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Profiles",
+                name: "CVs",
                 schema: "seeker",
                 columns: table => new
                 {
@@ -388,7 +388,7 @@ namespace PTJ.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProfileCertificates",
+                name: "CVCertificates",
                 schema: "seeker",
                 columns: table => new
                 {
@@ -414,13 +414,13 @@ namespace PTJ.Infrastructure.Migrations
                         name: "FK_ProfileCertificates_Profiles_ProfileId",
                         column: x => x.ProfileId,
                         principalSchema: "seeker",
-                        principalTable: "Profiles",
+                        principalTable: "CVs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProfileEducations",
+                name: "CVEducations",
                 schema: "seeker",
                 columns: table => new
                 {
@@ -446,13 +446,13 @@ namespace PTJ.Infrastructure.Migrations
                         name: "FK_ProfileEducations_Profiles_ProfileId",
                         column: x => x.ProfileId,
                         principalSchema: "seeker",
-                        principalTable: "Profiles",
+                        principalTable: "CVs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProfileExperiences",
+                name: "CVExperiences",
                 schema: "seeker",
                 columns: table => new
                 {
@@ -477,13 +477,13 @@ namespace PTJ.Infrastructure.Migrations
                         name: "FK_ProfileExperiences_Profiles_ProfileId",
                         column: x => x.ProfileId,
                         principalSchema: "seeker",
-                        principalTable: "Profiles",
+                        principalTable: "CVs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProfileSkills",
+                name: "CVSkills",
                 schema: "seeker",
                 columns: table => new
                 {
@@ -505,7 +505,7 @@ namespace PTJ.Infrastructure.Migrations
                         name: "FK_ProfileSkills_Profiles_ProfileId",
                         column: x => x.ProfileId,
                         principalSchema: "seeker",
-                        principalTable: "Profiles",
+                        principalTable: "CVs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -556,7 +556,7 @@ namespace PTJ.Infrastructure.Migrations
                         name: "FK_Applications_Profiles_ProfileId",
                         column: x => x.ProfileId,
                         principalSchema: "seeker",
-                        principalTable: "Profiles",
+                        principalTable: "CVs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -850,25 +850,25 @@ namespace PTJ.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ProfileCertificates_ProfileId",
                 schema: "seeker",
-                table: "ProfileCertificates",
+                table: "CVCertificates",
                 column: "ProfileId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProfileEducations_ProfileId",
                 schema: "seeker",
-                table: "ProfileEducations",
+                table: "CVEducations",
                 column: "ProfileId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProfileExperiences_ProfileId",
                 schema: "seeker",
-                table: "ProfileExperiences",
+                table: "CVExperiences",
                 column: "ProfileId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Profiles_UserId",
                 schema: "seeker",
-                table: "Profiles",
+                table: "CVs",
                 column: "UserId",
                 unique: true,
                 filter: "[IsDeleted] = 0");
@@ -876,7 +876,7 @@ namespace PTJ.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ProfileSkills_ProfileId",
                 schema: "seeker",
-                table: "ProfileSkills",
+                table: "CVSkills",
                 column: "ProfileId");
 
             migrationBuilder.CreateIndex(
@@ -939,19 +939,19 @@ namespace PTJ.Infrastructure.Migrations
                 schema: "jobs");
 
             migrationBuilder.DropTable(
-                name: "ProfileCertificates",
+                name: "CVCertificates",
                 schema: "seeker");
 
             migrationBuilder.DropTable(
-                name: "ProfileEducations",
+                name: "CVEducations",
                 schema: "seeker");
 
             migrationBuilder.DropTable(
-                name: "ProfileExperiences",
+                name: "CVExperiences",
                 schema: "seeker");
 
             migrationBuilder.DropTable(
-                name: "ProfileSkills",
+                name: "CVSkills",
                 schema: "seeker");
 
             migrationBuilder.DropTable(
@@ -979,7 +979,7 @@ namespace PTJ.Infrastructure.Migrations
                 schema: "jobs");
 
             migrationBuilder.DropTable(
-                name: "Profiles",
+                name: "CVs",
                 schema: "seeker");
 
             migrationBuilder.DropTable(

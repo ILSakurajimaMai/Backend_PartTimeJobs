@@ -4,11 +4,11 @@ using PTJ.Domain.Entities;
 
 namespace PTJ.Infrastructure.Configurations;
 
-public class ProfileCertificateConfiguration : IEntityTypeConfiguration<ProfileCertificate>
+public class CVCertificateConfiguration : IEntityTypeConfiguration<CVCertificate>
 {
-    public void Configure(EntityTypeBuilder<ProfileCertificate> builder)
+    public void Configure(EntityTypeBuilder<CVCertificate> builder)
     {
-        builder.ToTable("ProfileCertificates", "seeker");
+        builder.ToTable("CVCertificates", "seeker");
 
         builder.HasKey(pc => pc.Id);
 
@@ -30,10 +30,9 @@ public class ProfileCertificateConfiguration : IEntityTypeConfiguration<ProfileC
 
         builder.HasIndex(pc => pc.ProfileId);
 
-        builder.HasOne(pc => pc.Profile)
+        builder.HasOne(pc => pc.CV)
             .WithMany(p => p.Certificates)
             .HasForeignKey(pc => pc.ProfileId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }
-

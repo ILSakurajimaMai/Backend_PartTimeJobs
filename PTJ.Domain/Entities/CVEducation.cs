@@ -2,7 +2,7 @@ using PTJ.Domain.Common;
 
 namespace PTJ.Domain.Entities;
 
-public class ProfileEducation : BaseEntity
+public class CVEducation : BaseEntity
 {
     public int ProfileId { get; set; }
     public string InstitutionName { get; set; } = string.Empty;
@@ -14,5 +14,5 @@ public class ProfileEducation : BaseEntity
     public string? Description { get; set; }
 
     // Navigation properties
-    public virtual Profile Profile { get; set; } = null!;
+    public virtual CV CV { get; set; } = null!;
 }

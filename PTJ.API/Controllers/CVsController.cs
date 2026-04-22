@@ -1,31 +1,28 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PTJ.Application.DTOs.Profile;
+using PTJ.Application.DTOs.CV;
 using PTJ.Application.Services;
 
 namespace PTJ.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProfilesController : ControllerBase
+public class CVsController : ControllerBase
 {
-    private readonly IProfileService _profileService;
+    private readonly ICVService _cvService;
     private readonly IActivityLogService _activityLogService;
 
-    public ProfilesController(IProfileService profileService, IActivityLogService activityLogService)
+    public CVsController(ICVService cvService, IActivityLogService activityLogService)
     {
-        _profileService = profileService;
+        _cvService = cvService;
         _activityLogService = activityLogService;
     }
 
-    /// <summary>
-    /// Get profile by ID
-    /// </summary>
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
     {
-        var result = await _profileService.GetByIdAsync(id, cancellationToken);
+        var result = await _cvService.GetByIdAsync(id, cancellationToken);
 
         if (!result.Success)
         {
@@ -38,26 +35,23 @@ public class ProfilesController : ControllerBase
         await _activityLogService.LogActivityAsync(
             userId != 0 ? userId : null,
             "GET",
-            $"/api/profiles/{id}",
+            $"/api/cvs/{id}",
             null,
             ipAddress,
             userAgent,
             200,
             0,
-            $"Xem chi tiết profile ID: {id}");
+            $"Xem chi tiết CV ID: {id}");
 
         return Ok(result);
     }
 
-    /// <summary>
-    /// Get my default profile (authenticated user)
-    /// </summary>
     [Authorize(Roles = "STUDENT,ADMIN")]
     [HttpGet("me")]
-    public async Task<IActionResult> GetMyProfile(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetMyCV(CancellationToken cancellationToken)
     {
         var userId = GetUserId();
-        var result = await _profileService.GetDefaultByUserIdAsync(userId, cancellationToken);
+        var result = await _cvService.GetDefaultByUserIdAsync(userId, cancellationToken);
 
         if (!result.Success)
         {
@@ -69,33 +63,30 @@ public class ProfilesController : ControllerBase
         await _activityLogService.LogActivityAsync(
             userId,
             "GET",
-            "/api/profiles/me",
+            "/api/cvs/me",
             null,
             ipAddress,
             userAgent,
             200,
             0,
-            "Student xem profile của mình");
+            "Student xem CV của mình");
 
         return Ok(result);
     }
 
-    /// <summary>
-    /// Get all of my profiles (authenticated user)
-    /// </summary>
     [Authorize(Roles = "STUDENT,ADMIN")]
     [HttpGet("my")]
-    public async Task<IActionResult> GetMyProfiles(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetMyCVs(CancellationToken cancellationToken)
     {
         var userId = GetUserId();
-        var result = await _profileService.GetByUserIdAsync(userId, cancellationToken);
+        var result = await _cvService.GetByUserIdAsync(userId, cancellationToken);
 
         var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "0.0.0.0";
         var userAgent = Request.Headers["User-Agent"].ToString();
         await _activityLogService.LogActivityAsync(
             userId,
             "GET",
-            "/api/profiles/my",
+            "/api/cvs/my",
             null,
             ipAddress,
             userAgent,
@@ -106,15 +97,12 @@ public class ProfilesController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Create a profile (Student only)
-    /// </summary>
     [Authorize(Roles = "STUDENT,ADMIN")]
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] ProfileDto dto, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create([FromBody] CVDto dto, CancellationToken cancellationToken)
     {
         var userId = GetUserId();
-        var result = await _profileService.CreateAsync(userId, dto, cancellationToken);
+        var result = await _cvService.CreateAsync(userId, dto, cancellationToken);
 
         if (!result.Success)
         {
@@ -126,7 +114,7 @@ public class ProfilesController : ControllerBase
         await _activityLogService.LogActivityAsync(
             userId,
             "POST",
-            "/api/profiles",
+            "/api/cvs",
             null,
             ipAddress,
             userAgent,
@@ -137,15 +125,12 @@ public class ProfilesController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = result.Data?.Id }, result);
     }
 
-    /// <summary>
-    /// Update a profile (Student only)
-    /// </summary>
     [Authorize(Roles = "STUDENT,ADMIN")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] ProfileDto dto, CancellationToken cancellationToken)
+    public async Task<IActionResult> Update(int id, [FromBody] CVDto dto, CancellationToken cancellationToken)
     {
         var userId = GetUserId();
-        var result = await _profileService.UpdateAsync(id, userId, dto, cancellationToken);
+        var result = await _cvService.UpdateAsync(id, userId, dto, cancellationToken);
 
         if (!result.Success)
         {
@@ -157,7 +142,7 @@ public class ProfilesController : ControllerBase
         await _activityLogService.LogActivityAsync(
             userId,
             "PUT",
-            $"/api/profiles/{id}",
+            $"/api/cvs/{id}",
             null,
             ipAddress,
             userAgent,
@@ -168,15 +153,12 @@ public class ProfilesController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Set a profile as default (Student only)
-    /// </summary>
     [Authorize(Roles = "STUDENT,ADMIN")]
     [HttpPost("{id}/set-default")]
     public async Task<IActionResult> SetDefault(int id, CancellationToken cancellationToken)
     {
         var userId = GetUserId();
-        var result = await _profileService.SetDefaultAsync(id, userId, cancellationToken);
+        var result = await _cvService.SetDefaultAsync(id, userId, cancellationToken);
 
         if (!result.Success)
         {
@@ -188,7 +170,7 @@ public class ProfilesController : ControllerBase
         await _activityLogService.LogActivityAsync(
             userId,
             "POST",
-            $"/api/profiles/{id}/set-default",
+            $"/api/cvs/{id}/set-default",
             null,
             ipAddress,
             userAgent,
@@ -199,15 +181,12 @@ public class ProfilesController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Delete profile (Student only)
-    /// </summary>
     [Authorize(Roles = "STUDENT,ADMIN")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
         var userId = GetUserId();
-        var result = await _profileService.DeleteAsync(id, userId, cancellationToken);
+        var result = await _cvService.DeleteAsync(id, userId, cancellationToken);
 
         if (!result.Success)
         {
@@ -219,13 +198,13 @@ public class ProfilesController : ControllerBase
         await _activityLogService.LogActivityAsync(
             userId,
             "DELETE",
-            $"/api/profiles/{id}",
+            $"/api/cvs/{id}",
             null,
             ipAddress,
             userAgent,
             200,
             0,
-            $"Student xóa profile ID: {id}");
+            $"Student xóa CV ID: {id}");
 
         return Ok(result);
     }

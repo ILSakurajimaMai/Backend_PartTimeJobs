@@ -39,7 +39,7 @@ builder.Services.AddControllers(options =>
 builder.Services.AddEndpointsApiExplorer();
 
 // Add AutoMapper
-builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddAutoMapper(typeof(MappingCV));
 
 // Configure Swagger with JWT support
 builder.Services.AddSwaggerGen(options =>
@@ -191,6 +191,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJobPostService, JobPostService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<ICVService, CVService>();
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
 builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
 builder.Services.AddScoped<IChatService, ChatService>();
@@ -204,7 +205,7 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 // Register AI Services
 builder.Services.AddScoped<JobSearchPlugin>();
 builder.Services.AddScoped<IdentityPlugin>();
-builder.Services.AddScoped<ProfilePlugin>();
+builder.Services.AddScoped<CVPlugin>();
 builder.Services.AddScoped<JobDetailPlugin>();
 builder.Services.AddScoped<IAIChatService, AIChatService>();
 
